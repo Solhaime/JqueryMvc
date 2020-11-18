@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        p {text-align:center}
+    </style>
+</head>
+<body>
+<h1>
+    <p>
+Lets add a new user!
+<form th:method="POST" th:action="@{/users}" th:object="${user}">
+<div>
+    <p>
+<label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <label for="lastname">Lastname</label>
+    <input type="text" th:field="*{lastname}" id="lastname"/>
+    <br>
+    <input type="submit" value="Add User"/>
+</p>
+</div>
+</form>
+    </p>
+</h1>
+</body>
+</html>
