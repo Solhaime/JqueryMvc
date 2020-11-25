@@ -7,6 +7,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import service.userService.UserDetailServiceImpl;
 import service.userService.UserService;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 public class MainTest {
     public static void main( String[] args ) {
 
@@ -22,7 +27,12 @@ public class MainTest {
             System.out.println("Last Name = " + user.getLastname());*/
            /*User user = (User) service.loadUserByUsername("bek");*/
         /*    bean.setUserRoleWhereRoleId((long)1);*/
-        bean.updateUserDetails(true,new Role("ADMIN") ,(long)31);
+        String role = "ADMIN";
+        Long id = 31L;
+        User user = bean.getUserById(id);
+        user.addRole(role);
+        bean.mergeUser(user);
+  /*      bean.updateUserDetails(true,role ,(long)31);*/
 
 /*        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof UserDetails) {

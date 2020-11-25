@@ -87,8 +87,10 @@ public class AdminAccessController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String updateUserDetailsPostController(@RequestParam("id")String id
             , @RequestParam("role")String role,@RequestParam("isActive") String isActive){
-        userService.updateUserDetails(Boolean.parseBoolean(isActive),new Role(role),Long.parseLong(id));
-
+        User user = userService.getUserById(Long.parseLong(id));
+        user.changeRole(role);
+        userService.mergeUser(user);
+        userService.updateUserDetails(Boolean.parseBoolean(isActive),Long.parseLong(id));
         return "successupd";
     }
 }

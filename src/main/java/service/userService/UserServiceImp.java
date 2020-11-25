@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 @Service
 @ComponentScan("DAO")
@@ -42,8 +43,19 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void updateUserDetails( boolean isActive , Role role , Long id ) {
-        userDao.updateUserDetails(isActive,role,id);
+    public void updateUserDetails( boolean isActive , Long id ) {
+        userDao.updateUserDetails(isActive,id);
+    }
+
+    @Override
+    public User getUserById( Long id ) {
+       return userDao.getUserById(id);
+    }
+
+    @Transactional
+    @Override
+    public void mergeUser( User user ) {
+        userDao.mergeUser(user);
     }
 
 /*    @Override

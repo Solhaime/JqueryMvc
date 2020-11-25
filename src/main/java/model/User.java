@@ -105,6 +105,15 @@ public class User implements UserDetails {
         roles.add(role);
     }
 
+    public void changeRole(String role){
+        this.roles.clear();
+        this.roles.add(new Role(role));
+    }
+
+    public String isActiveString(){
+        return String.valueOf(isActive);
+    }
+
     public String getRolesString(){
         StringBuilder result=new StringBuilder();
         for(Role r: roles){

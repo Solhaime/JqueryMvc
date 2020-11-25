@@ -3,6 +3,7 @@ package service.userService;
 import model.Role;
 import model.User;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
@@ -11,5 +12,7 @@ public interface UserService {
     User getUserByUsername(String username);
     public void deleteUserById(Long id);
 /*    public void setUserRoleWhereRoleId(Long id);*/
-    void updateUserDetails( boolean isActive , Role role , Long id );
+    void updateUserDetails( boolean isActive, Long id );
+    public User  getUserById( Long id );
+    public void mergeUser(User user);
 }

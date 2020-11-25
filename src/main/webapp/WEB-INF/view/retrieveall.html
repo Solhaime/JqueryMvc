@@ -29,6 +29,7 @@
             <th> lastname </th>
             <th> username </th>
             <th> role </th>
+            <th> is Active </th>
         </tr>
         </thead>
         <tbody>
@@ -38,6 +39,7 @@
             <td><span th:text="${user.lastname}"> Lastname </span></td>
             <td><span th:text="${user.username}"> Username </span></td>
             <td><span th:text="${user.getRolesString()}"> Role </span></td>
+            <td><span th:text="${user.isActiveString()}"> is Active </span></td>
         </tr>
         </tbody>
     </table>

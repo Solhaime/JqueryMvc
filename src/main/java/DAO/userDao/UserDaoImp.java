@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Collection;
 import java.util.List;
 
 @Repository("daoRep")
@@ -44,12 +45,21 @@ public class UserDaoImp implements UserDao{
         }
 
     @Override
-    public void updateUserDetails( boolean isActive , Role role , Long id ){
-        Query query = em.createQuery("update User  set  " +
-                "isActive=:isActive, roles=:role where id=:id");
+    public void updateUserDetails( boolean isActive, Long id ){
+        Query query = em.createQuery("update User  user set user.isActive=:isActive where user.id=:id");
         query.setParameter("id",id)
-                .setParameter("isActive", isActive)
-                .setParameter("role", role).executeUpdate();
+                .setParameter("isActive", isActive).executeUpdate();
+
+    }
+
+    @Override
+    public User  getUserById( Long id ) {
+        User user = (User) em.createQuery("select user from User user where user.id =:id").setParameter("id", id).getSingleResult();
+        return user;
+    }
+    @Override
+    public void mergeUser(User user){
+        em.merge(user);
     }
 
   /*  public void setUserRoleWhereRoleId(Long id){
