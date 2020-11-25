@@ -1,16 +1,10 @@
 import config.AppConfig;
-import model.Role;
 import model.User;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import service.userService.UserDetailServiceImpl;
 import service.userService.UserService;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class MainTest {
     public static void main( String[] args ) {

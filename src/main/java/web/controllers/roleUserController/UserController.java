@@ -16,7 +16,7 @@ public class UserController {
 
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     public String currentUserName(Principal principal, Model model) {

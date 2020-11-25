@@ -2,12 +2,14 @@ package web.controllers.roleAdminController;
 
 import model.Role;
 import model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import service.userService.UserService;
 import service.roleService.RoleService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -23,7 +26,7 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminAccessController {
     @Autowired
-    public UserService userService;
+    private UserService userService;
 
     @Autowired
     @Qualifier("availableRoles")
@@ -44,7 +47,10 @@ public class AdminAccessController {
 
     @PostMapping("users/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String returnAllUsers( @ModelAttribute("user") User user, @RequestParam("roleName") String role ) {
+    public String returnAllUsers( @ModelAttribute("user") User user,
+                                  @RequestParam("roleName") String role,
+                                  @RequestParam("username") String username, Model model ) {
+        model.addAttribute("takenUsername", username);
         try {
             user.addRole(role);
             userService.add(user);
@@ -92,5 +98,14 @@ public class AdminAccessController {
         userService.mergeUser(user);
         userService.updateUserDetails(Boolean.parseBoolean(isActive),Long.parseLong(id));
         return "successupd";
+    }
+    @ExceptionHandler(HibernateException.class)
+    public String constraintExceptionHandler(){
+        return "constraintusername";
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public String idFormatExceptionHandler(){
+        return "numberformatexc";
     }
 }

@@ -15,8 +15,8 @@ public class TestController {
        return String.valueOf(authentication.getAuthorities().stream().filter(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN")).count());
     }
 
-/*    @PostMapping("users/delete")
-    public String testTest(@RequestParam("id") String id ){
-        return id;
+/*    @PostMapping("admin/users/add")
+    public String testTest(@RequestParam("username") String username ){
+        return username;
     }*/
 }
