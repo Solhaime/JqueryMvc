@@ -33,7 +33,7 @@
         </p>
         <div class="form-group">
             <label for="sel1">Select role:</label>
-            <select name="roleName" class="form-control" id="sel1"  required="">
+            <select multiple size="2" name="roleName" class="form-control" id="sel1"  required="">
                 <option th:each="role : ${roles}" th:text="${role}"></option>
             </select>
         </div>
