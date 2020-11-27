@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import service.userService.UserService;
 
 @Controller
-public class PermitedForAllController {
+public class HelloController {
 
     @Autowired
     private UserService userService;

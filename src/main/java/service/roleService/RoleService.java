@@ -11,4 +11,6 @@ public interface RoleService {
     Role getRoleById(long id);
 
     Collection<Role> getAllRoles();
+
+    Role getRoleByName( String role);
 }

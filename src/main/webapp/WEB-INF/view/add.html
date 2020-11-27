@@ -33,13 +33,9 @@
         </p>
         <div class="form-group">
             <label for="sel1">Select role:</label>
-            <select name="roleId" class="form-control" id="sel1"  required="">
-                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.getAuthority()}"></option>
+            <select name="roleName" class="form-control" id="sel1"  required="">
+                <option th:each="role : ${roles}" th:text="${role}"></option>
             </select>
-<!--            <select th:field="*{percentage}">
-                <option th:each="i : ${#numbers.sequence(0, 100)}" th:value="${i}" th:text="${i}">
-                </option>
-            </select>-->
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit" >add</button>
 

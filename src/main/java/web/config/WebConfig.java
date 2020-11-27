@@ -62,10 +62,10 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean(name = "availableRoles")
-    public List<Role> currentlyAvailableRolesList(){
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role("ADMIN"));
-        roles.add(new Role("USER"));
+    public List<String> currentlyAvailableRolesList(){
+        List<String> roles = new ArrayList<>();
+        roles.add("ADMIN");
+        roles.add("USER");
         return roles;
     }
 

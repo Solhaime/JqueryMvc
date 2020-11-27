@@ -24,6 +24,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void add( User user ) {
+        user.setPassword(encodePassword(user.getPassword()));
         userDao.addUser(user);
     }
 
@@ -44,11 +45,6 @@ public class UserServiceImp implements UserService {
         userDao.deleteUserById(id);
     }
 
-    @Transactional
-    @Override
-    public void updateUserDetails( boolean isActive , Long id ) {
-        userDao.updateUserDetails(isActive,id);
-    }
 
     @Override
     public User getUserById( Long id ) {
@@ -58,6 +54,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void mergeUser( User user ) {
+        user.setPassword(encodePassword(user.getPassword()));
         userDao.mergeUser(user);
     }
 

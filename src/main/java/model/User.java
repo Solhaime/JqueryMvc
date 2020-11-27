@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,11 +42,12 @@ public class User implements UserDetails {
 
 
     @ManyToMany(cascade =
-            CascadeType.ALL, fetch= FetchType.LAZY)//Lazy
+            CascadeType.ALL, fetch= FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
+
     public User( String name , String lastname , String username , String password) {
         this.name = name;
         this.lastname = lastname;

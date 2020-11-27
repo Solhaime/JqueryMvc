@@ -15,8 +15,6 @@ public interface UserService {
 
     public void deleteUserById(Long id);
 
-    void updateUserDetails( boolean isActive, Long id );
-
     public User  getUserById( Long id );
 
     public void mergeUser(User user);

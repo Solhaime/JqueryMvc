@@ -11,4 +11,6 @@ public interface RoleDao {
 
     Collection<Role> getAllRoles();
 
+    Role getRoleByName( String role);
+
 }
