@@ -22,17 +22,6 @@ public class PermitedForAllController {
         return "/index";
     }
 
-/*
-    @PostMapping("login")
-    public String loginPage() {
-        return "/user";
-    }
-
-    @GetMapping("login")
-    public String loginPag1e() {
-        return "/login";
-    }
-*/
 
     @GetMapping("/register")
     public String registerPage( Model model){

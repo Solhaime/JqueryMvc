@@ -5,6 +5,7 @@ import model.Role;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +18,15 @@ public class UserServiceImp implements UserService {
     @Autowired
     private UserDao userDao;
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
     public void add( User user ) {
         userDao.addUser(user);
     }
+
     @Transactional
     @Override
     public List<User> listUsers() {
@@ -58,8 +61,10 @@ public class UserServiceImp implements UserService {
         userDao.mergeUser(user);
     }
 
-/*    @Override
-    public void setUserRoleWhereRoleId( Long id ) {
-        userDao.setUserRoleWhereRoleId(id);
-    }*/
+    @Transactional
+    @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
 }

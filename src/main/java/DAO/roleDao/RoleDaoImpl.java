@@ -17,9 +17,9 @@ public class RoleDaoImpl implements RoleDao{
         manager.persist(new Role(role));
     }
 
-    @Override
+    @Override//find
     public Role getRoleById( long id ) {
-      return manager.createQuery("select role from Role role where role.id=:id", Role.class).setParameter("id",id).getSingleResult();
+      return manager.find(Role.class,id);
     }
 
     @Override
@@ -27,8 +27,4 @@ public class RoleDaoImpl implements RoleDao{
         return manager.createQuery("from Role").getResultList();
     }
 
-    @Override
-    public boolean deleteRoleById( long id ) {
-        return false;
-    }
 }

@@ -11,9 +11,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.transaction.annotation.Transactional;
 import service.userService.UserDetailServiceImpl;
 import web.handler.SecondAuthenticationSuccessHandler;
 
@@ -37,61 +39,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    /*@Bean
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new MyAuthenticationSuccessHandler();
-    }*/
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(provider());/*userDetailsService(userService).passwordEncoder(passwordEncoder());*/
+        auth.authenticationProvider(provider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()/*.authorizeRequests().antMatchers("/index").permitAll()
-                .and()*//*.authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN")
-                .and()*/.formLogin().loginPage("/login").loginProcessingUrl("/login")
+        http.csrf().disable()
+                .formLogin().loginPage("/login").loginProcessingUrl("/login")
                 .successHandler(secondAuthenticationSuccessHandler()).and().exceptionHandling().accessDeniedPage("/accessDenied")
-                    .and().logout();/*formLogin().loginPage("/login").defaultSuccessUrl("/courses",true).and()
-                .antMatcher("/login").anonymous()*/
-               /* .and().rememberMe()*/
-     /*               .and().logout().logoutUrl("/logout").clearAuthentication(true).invalidateHttpSession(true).deleteCookies("JSESSION","remember-me")
-                .logoutSuccessUrl("/login")
-                .and().antMatcher("/register").anonymous()
-                .and()
-                .exceptionHandling().accessDeniedPage("/accessDenied");*/
-/*
-        http .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/", "/home").permitAll() // (3)
-                .anyRequest().authenticated() // (4)
-                .and()
-                .formLogin() // (5)
-                .loginPage("/login") // (5)
-                .permitAll().defaultSuccessUrl("/user")
-                .and()
-                .logout() // (6)
-                .permitAll()
-                .and().antMatcher("/register").anonymous()
-                .and()
-                .formLogin();*/
+                    .and().logout();
 
-
-      /*  http
-                // делаем страницу регистрации недоступной для авторизированных пользователей
-                .authorizeRequests()
-                //страницы аутентификаци доступна всем
-                .antMatchers("/login").anonymous()
-                // защищенные URL
-                .antMatchers("/").access("hasAnyRole('ADMIN')").anyRequest().authenticated();*/
 
 
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder(10);
     }
 
     @Bean

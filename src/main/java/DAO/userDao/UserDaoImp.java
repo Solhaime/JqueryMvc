@@ -2,7 +2,11 @@ package DAO.userDao;
 
 import model.Role;
 import model.User;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
+import org.hibernate.Session;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +28,7 @@ public class UserDaoImp implements UserDao{
 
     @Override
     public List<User> listUsers() {
-        return em.createQuery("from User").getResultList();
+        return em.createQuery("from User user JOIN FETCH user.roles").getResultList();
 
     }
 
@@ -33,9 +37,10 @@ public class UserDaoImp implements UserDao{
         em.persist(user);
     }
 
+
     @Override
     public User  getUserByUsername( String username ) {
-        User user = (User) em.createQuery("select user from User user where user.username =:username").setParameter("username", username).getSingleResult();
+        User user = (User) em.createQuery("select user from User user JOIN FETCH user.roles where user.username =:username").setParameter("username", username).getSingleResult();
         return user;
     }
 
@@ -54,7 +59,7 @@ public class UserDaoImp implements UserDao{
 
     @Override
     public User  getUserById( Long id ) {
-        User user = (User) em.createQuery("select user from User user where user.id =:id").setParameter("id", id).getSingleResult();
+        User user = (User) em.find(User.class, id);
         return user;
     }
     @Override
@@ -62,21 +67,6 @@ public class UserDaoImp implements UserDao{
         em.merge(user);
     }
 
-  /*  public void setUserRoleWhereRoleId(Long id){
-        em.createQuery("insert into User(roles) Role role where role.id=:id").setParameter("id",id);
-    }*/
-/*    @Override
-    public Optional<User> selectUserByUsername( String username ) {
-        return listUsers().stream().filter(user -> username.equals(user.getUsername())).findFirst();
-    }*/
 
-/*    @Override
-    public User getUserByUsername( String username ) {
-        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery("select user from User user where user.username =:username");
-        query.setParameter("username", username);
-        if (query.getSingleResult() == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        return query.getSingleResult();
-    }*/
+
 }

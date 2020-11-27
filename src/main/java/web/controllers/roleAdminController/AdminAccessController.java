@@ -29,8 +29,7 @@ public class AdminAccessController {
     private UserService userService;
 
     @Autowired
-    @Qualifier("availableRoles")
-    List<Role> roles;
+    private RoleService roleService;
 
     @Autowired
     @Qualifier("accountBlockingValues")
@@ -41,24 +40,25 @@ public class AdminAccessController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String newUser( Model model ) {
         model.addAttribute("user" , new User());
-        model.addAttribute("roles" , roles);
+        model.addAttribute("roles" , roleService.getAllRoles());
         return "add";
     }
 
     @PostMapping("users/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String returnAllUsers( @ModelAttribute("user") User user,
-                                  @RequestParam("roleName") String role,
+                                  @RequestParam("roleId") String roleId,
                                   @RequestParam("username") String username, Model model ) {
         model.addAttribute("takenUsername", username);
-        try {
-            user.addRole(role);
-            userService.add(user);
+      /*  try {*/
+        Role role = roleService.getRoleById(Long.parseLong(roleId));
+        user.setRole(role);
+            userService.mergeUser(user);
             return "/success";
-        }catch(ConstraintViolationException e){
+/*        }catch(ConstraintViolationException e){
             System.out.println("Could not execute statement because user with chosen name already exists");
             return "add";
-        }
+        }*/
     }
 
     @GetMapping("/")
@@ -84,19 +84,25 @@ public class AdminAccessController {
     @GetMapping("users/update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String updateUserDetailsGetController(Model model){
+        model.addAttribute("updatableUser" , new User());
         model.addAttribute("accountBlockValue",accountBlockValue);
-        model.addAttribute("rolesList" , roles);
+        model.addAttribute("rolesList" , roleService.getAllRoles());
         return "update";
     }
 
     @PostMapping("users/update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String updateUserDetailsPostController(@RequestParam("id")String id
-            , @RequestParam("role")String role,@RequestParam("isActive") String isActive){
-        User user = userService.getUserById(Long.parseLong(id));
+    public String updateUserDetailsPostController(/*@RequestParam("id")String id,*/@ModelAttribute("updatableUser") User user
+            , @RequestParam("roleId")String roleId,@RequestParam("isActive") String isActive){
+       /* user.setId(Long.parseLong(id));*/
+        Role role = roleService.getRoleById(Long.parseLong(roleId));
+        user.setRole(role);
+        user.setActive(Boolean.parseBoolean(isActive));
+        userService.mergeUser(user);
+        /*User user = userService.getUserById(Long.parseLong(id));
         user.changeRole(role);
         userService.mergeUser(user);
-        userService.updateUserDetails(Boolean.parseBoolean(isActive),Long.parseLong(id));
+        userService.updateUserDetails(Boolean.parseBoolean(isActive),Long.parseLong(id));*/
         return "successupd";
     }
     @ExceptionHandler(HibernateException.class)

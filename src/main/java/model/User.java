@@ -1,7 +1,10 @@
 package model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,8 +23,8 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
@@ -38,7 +41,7 @@ public class User implements UserDetails {
 
 
     @ManyToMany(cascade =
-            CascadeType.ALL, fetch= FetchType.EAGER)
+            CascadeType.ALL, fetch= FetchType.LAZY)//Lazy
     private Set<Role> roles = new HashSet<>();
 
     public User() {
@@ -121,6 +124,14 @@ public class User implements UserDetails {
         }
         result.delete(result.length()-2, result.length()-1);
         return result.toString();
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive( boolean active ) {
+        isActive = active;
     }
 
     @Override

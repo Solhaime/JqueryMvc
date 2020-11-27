@@ -16,7 +16,7 @@ public class SecondAuthenticationSuccessHandler implements AuthenticationSuccess
                                          Authentication authentication ) throws IOException, ServletException {
         Long admin = authentication.getAuthorities().stream().filter(grantedAuthority ->
                         grantedAuthority.getAuthority().equals("ADMIN")).count();
-        if(admin > 0){
+        if(admin > 0) {
             httpServletResponse.sendRedirect("/admin/");
         }else {
             httpServletResponse.sendRedirect("/user/");
