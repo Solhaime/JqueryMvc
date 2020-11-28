@@ -11,7 +11,7 @@ import SpringBootApp.service.userService.UserService;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
 
@@ -29,7 +29,7 @@ public class UserController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("password", user.getPassword());
         model.addAttribute("Authorities", user.getRolesString());
-            return "/user";
+        return "/communism";
     }
 
 
@@ -46,3 +46,4 @@ public class UserController {
         model.addAttribute()
     }*/
 }
+

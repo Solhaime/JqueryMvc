@@ -67,7 +67,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String retrieveAllUsersFromDataBase( Model model ) {
         model.addAttribute("usersList" , userService.listUsers());
-        return "retrieveall";
+        return "communism";
     }
 
     @GetMapping("users/delete")
