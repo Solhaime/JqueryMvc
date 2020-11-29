@@ -51,27 +51,31 @@
             <h3>Something</h3>
             <p>Something x2</p>
             <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/admin/">Admin</a>
+                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link active" href="#adminBar" role="tab" data-toggle="pill">Admin</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/">User</a>
+                    <a class="nav-link" href="#user" role="tab" data-toggle="pill">User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
         </div>
         <div class="col-sm-8">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="adminBar">
+                    <div class="tab-content" sec:authorize="hasAuthority('ADMIN')">
             <h2>Admin panel</h2>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/admin/">Users table</a>
+                    <a class="nav-link active" href="#admin" role="tab" data-toggle="pill">Users table</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/users/add">New User</a>
+                    <a class="nav-link" href="#newUser" role="tab" data-toggle="pill">New User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
-            <table class="center table-hover" width="100%" border="3" cellspacing="1" cellpadding="2">
+                <div role="tabpanel" class="tab-pane active" id="admin">
+            <table class="table table-hover">
                 <thead>
                 <tr class="active">
                     <th> id </th>
@@ -123,17 +127,54 @@
 
                                 <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Modal Heading</h4>
+                                    <h4 class="modal-title">Edit user</h4>
                                     <button type="button" class="close" data-dismiss="modal">×</button>
                                 </div>
 
                                 <!-- Modal body -->
                                 <div class="modal-body">
-                                    Modal body..
+                                    <div class="container">
+                                        <form th:method="POST" th:action="@{update}" th:object="${updatableUser}">
+
+                                            <p>
+                                                <label for="id" class="sr-only">Id</label>
+                                                <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="id" required="" autofocus=""/>
+                                            </p>
+                                            <p>
+                                                <label for="username" class="sr-only">Username</label>
+                                                <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required="" autofocus=""/>
+                                            </p>
+                                            <p>
+                                                <label for="password" class="sr-only">Password</label>
+                                                <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
+                                            </p>
+                                            <p>
+                                                <label for="name" class="sr-only">Name</label>
+                                                <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name" required=""/>
+                                            </p>
+                                            <p>
+                                                <label for="lastname" class="sr-only">Lastname</label>
+                                                <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname" required=""/>
+                                            </p>
+                                            <div class="form-group">
+                                                <label for="sel2">Is active user (set false if you want to block):</label>
+                                                <select name="isActive" class="form-control" id="sel2"  required="">
+                                                    <option th:each="role : ${accountBlockValue}" th:text="${role}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sel3">Select role:</label>
+                                                <select multiple size="2" name="roleName" class="form-control" id="sel3"  required="">
+                                                    <option th:each="role : ${rolesList}"  th:text="${role}"></option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
 
                                 <!-- Modal footer -->
                                 <div class="modal-footer">
+                                    <button class="btn  btn-primary" type="submit" >update</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
 
@@ -143,6 +184,62 @@
                 </tr>
                 </tbody>
             </table>
+                </div>
+                    <div role="tabpanel" class="tab-pane" id="newUser">
+                        <div class="container">
+                            <form th:method="POST" th:action="@{add}" th:object="${user}">
+                                <h4 class="form-signin-heading">Add a new user</h4>
+                                <p>
+                                    <label for="username" class="sr-only">Username</label>
+                                    <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required=""/>
+                                </p>
+                                <p>
+                                    <label for="password" class="sr-only">Password</label>
+                                    <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
+                                </p>
+                                <p>
+                                    <label for="name" class="sr-only">Name</label>
+                                    <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name"/>
+                                </p>
+                                <p>
+                                    <label for="lastname" class="sr-only">Lastname</label>
+                                    <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname"/>
+                                </p>
+                                <div class="form-group">
+                                    <label for="sel1">Select role:</label>
+                                    <select multiple size="2" name="roleName" class="form-control" id="sel1"  required="">
+                                        <option th:each="role : ${rolesList}" th:text="${role}"></option>
+                                    </select>
+                                </div>
+                                <button type="sumbit" class="btn bth-lg btn-success">add</button>
+
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="user">
+                    <h2>User information-page</h2>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr class="active">
+                            <th> id </th>
+                            <th> name </th>
+                            <th> lastname </th>
+                            <th> username </th>
+                            <th> role </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td><span th:text="${id}"> Id </span></td>
+                        <td><span th:text="${name}"> Name </span></td>
+                        <td><span th:text="${lastname}"> Lastname </span></td>
+                        <td><span th:text="${username}"> Username </span></td>
+                        <td><span th:text="${Authorities}"> Role </span></td>
+
+                        </tbody>
+                    </table>
+                </div>
 <!--            <div class="modal fade" id="register">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -187,6 +284,7 @@
             </div>-->
              </div>
     </div>
+</div>
 </div>
 </div>
 <div class="jumbotron text-center" style="margin-bottom:0">

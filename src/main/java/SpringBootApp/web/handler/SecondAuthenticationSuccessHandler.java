@@ -17,9 +17,9 @@ public class SecondAuthenticationSuccessHandler implements AuthenticationSuccess
         Long admin = authentication.getAuthorities().stream().filter(grantedAuthority ->
                         grantedAuthority.getAuthority().equals("ADMIN")).count();
         if(admin > 0) {
-            httpServletResponse.sendRedirect("/test");
+            httpServletResponse.sendRedirect("/test#adminBar");
         }else {
-            httpServletResponse.sendRedirect("/user/");
+            httpServletResponse.sendRedirect("/test#user");
         }
     }
 }
