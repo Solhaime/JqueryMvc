@@ -1,0 +1,199 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Bootstrap 4 Website Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .fakeimg {
+            height: 200px;
+            background: #aaa;
+        }
+    </style>
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" sec:authentication="name">Admin1</a>
+    <a class="navbar-brand" sec:authorize="isAuthenticated()" sec:authentication="principal.authorities">USER</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <button class="btn btn-success " type="submit" data-toggle="modal" data-target="#register" sec:authorize="!isAuthenticated()">register</button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    </div>
+    <form class="form-inline" method="post" action="/login" sec:authorize="!isAuthenticated()">
+        <div class="form-group">
+            <label for="uname" color="white">Username:</label>
+            <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div class="right-container">
+        <form class="form-signin" method="get" action="/logout" sec:authorize="isAuthenticated()">
+            <button class="btn btn-primary " type="submit">logout</button>
+        </form>
+    </div>
+</nav>
+<div sec:authorize="isAuthenticated()">
+<div class="container" style="margin-top:30px">
+    <div class="row">
+        <div class="col-sm-2">
+            <h3>Something</h3>
+            <p>Something x2</p>
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/users/">User</a>
+                </li>
+            </ul>
+            <hr class="d-sm-none">
+        </div>
+        <div class="col-sm-8">
+            <h2>Admin panel</h2>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/">Users table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users/add">New User</a>
+                </li>
+            </ul>
+            <hr class="d-sm-none">
+            <table class="center table-hover" width="100%" border="3" cellspacing="1" cellpadding="2">
+                <thead>
+                <tr class="active">
+                    <th> id </th>
+                    <th> name </th>
+                    <th> lastname </th>
+                    <th> username </th>
+                    <th> role </th>
+                    <th> is Active </th>
+                    <th> Delete </th>
+                    <th> Edit </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${usersList}">
+                    <td><span th:text="${user.id}"> Id </span></td>
+                    <td><span th:text="${user.name}"> Name </span></td>
+                    <td><span th:text="${user.lastname}"> Lastname </span></td>
+                    <td><span th:text="${user.username}"> Username </span></td>
+                    <td><span th:text="${user.getRolesString()}"> Role </span></td>
+                    <td><span th:text="${user.isActiveString()}"> is Active </span></td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">delete</button></td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">edit</button></td>
+                    <div class="modal fade" id="delete">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Modal Heading</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    Modal body..
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="edit">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Modal Heading</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    Modal body..
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+<!--            <div class="modal fade" id="register">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        &lt;!&ndash; Modal Header &ndash;&gt;
+                        <div class="modal-header">
+                            <h4 class="modal-title">Registration form</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                        </div>
+
+                        &lt;!&ndash; Modal body &ndash;&gt;
+                        <div class="modal-body">
+                            <div class="container">
+                                <form th:method="POST" th:action="@{/register}" th:object="${user}">
+                                    <p>
+                                        <label for="username" class="sr-only">Username</label>
+                                        <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required=""/>
+                                    </p>
+                                    <p>
+                                        <label for="password" class="sr-only">Password</label>
+                                        <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
+                                    </p>
+                                    <p>
+                                        <label for="name" class="sr-only">Name</label>
+                                        <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name"/>
+                                    </p>
+                                    <p>
+                                        <label for="lastname" class="sr-only">Lastname</label>
+                                        <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname"/>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                        &lt;!&ndash; Modal footer &ndash;&gt;
+                        <div class="modal-footer">
+                            <button class="btn btn-primary btn-success" type="submit" >Register</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>-->
+             </div>
+    </div>
+</div>
+</div>
+<div class="jumbotron text-center" style="margin-bottom:0">
+    <p>Footer</p>
+</div>
+
+</body>
+</html>
+
+

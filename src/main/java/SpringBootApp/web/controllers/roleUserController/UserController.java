@@ -3,6 +3,7 @@ package SpringBootApp.web.controllers.roleUserController;
 
 import SpringBootApp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,6 @@ public class UserController {
     @GetMapping("/")
     public String currentUserName(Principal principal, Model model) {
         User user = userService.getUserByUsername(principal.getName());
-
         /*model.addAttribute("userDetail", user.toString())*/
         model.addAttribute("id", user.getId());
         model.addAttribute("name", user.getName());
@@ -29,7 +29,7 @@ public class UserController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("password", user.getPassword());
         model.addAttribute("Authorities", user.getRolesString());
-        return "/communism";
+        return "/test";
     }
 
 

@@ -1,0 +1,143 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>All users table</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        table.center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        p {text-align:center}
+    </style>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" sec:authorize="isAuthenticated()">
+    <div class="container">
+        <div class="navbar-header">
+User: <div class="navbar-brand" sec:authentication="name"></div>
+With role:   <div class="navbar-brand" sec:authentication="principal.authorities"></div>
+        </div>
+        <div class="right-container">
+            <form class="form-signin" method="get" action="/logout">
+                <button class="btn btn-primary btn-small" type="submit">logout</button>
+            </form>
+    </div>
+    </div>
+</div>
+<nav class="navbar navbar-light navbar-vertical" sec:authorize="isAuthenticated()">
+    <div class="container-fluid">
+        <div class="navbar-header">
+    <div class="btn-group-vertical btn-group-md">
+<input type="button" class="btn btn-info" value="user"> <!--data-toggle="collapse" data-target="userich"-->
+        <input type="button" class="btn btn-info" value="admin">
+    </div>
+    </div>
+    </div>
+</nav>
+<div sec:authorize="hasAuthority('USER')"> <!--class="collapse" id="userich"-->
+<h1>
+    <p>
+        <caption>&nbsp;Your personal details:</caption>
+    </p>
+    <table class="center table-hover" border="3" cellspacing="1" cellpadding="2">
+        <tbody>
+
+        <tr>
+            <td style="width: 12%;">&nbsp;ID:</td>
+            <td style="width: 40%;" th:text="${id}">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 12%;">&nbsp;Name:</td>
+            <td style="width: 40%;" th:text="${name}">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 12%;">&nbsp;Lastname:</td>
+            <td style="width: 40%;" th:text="${lastname}">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 12%;">&nbsp;Username:</td>
+            <td style="width: 40%;" th:text="${username}">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 12%;">&nbsp;Password:</td>
+            <td style="width: 40%;" th:text="${password}">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width: 12%;">&nbsp;Role:</td>
+            <td style="width: 40%;" th:text="${Authorities}">&nbsp;</td>
+        </tr>
+        </tbody>
+    </table>
+</h1>
+</div>
+<div sec:authorize="hasAuthority('ADMIN')">
+<h1>
+    <p>
+        <caption>&nbsp;Admin panel</caption>
+    </p>
+    <table class="center table-hover" width="35%">
+        <thead>
+        <tr class="active">
+            <th> id </th>
+            <th> name </th>
+            <th> lastname </th>
+            <th> username </th>
+            <th> role </th>
+            <th> is Active </th>
+            <th> Delete </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${usersList}">
+            <td><span th:text="${user.id}"> Id </span></td>
+            <td><span th:text="${user.name}"> Name </span></td>
+            <td><span th:text="${user.lastname}"> Lastname </span></td>
+            <td><span th:text="${user.username}"> Username </span></td>
+            <td><span th:text="${user.getRolesString()}"> Role </span></td>
+            <td><span th:text="${user.isActiveString()}"> is Active </span></td>
+            <td><button class="btn btn-xs btn-danger" type="submit" data-toggle="collapse" data-target="#hide">delete</button></td>
+            <div class="collapse" id="hide">
+                <div class="container-col-3">
+                    <form class="form-signin" method="post" action="/admin/users/delete">
+                        <h2 class="form-signin-heading">Provide id of user you want to delete</h2>
+                        <p>
+                            <label for="id" class="sr-only">Id</label>
+                            <input type="text" id="id" name="id" class="form-control" placeholder="id of user" required="" autofocus="">
+                        </p>
+                        <button class="btn btn-sm btn-primary btn-block" type="submit">delete</button>
+                    </form>
+                </div>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</h1>
+<div class="container">
+    <form class="form-signin" method="get" action="/admin/users/add">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">add user</button>
+    </form>
+</div>
+<div class="container">
+    <form class="form-signin" method="get" action="/admin/users/delete">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">delete user by id</button>
+    </form>
+</div>
+<div class="container">
+    <form class="form-signin" method="get" action="/admin/users/update">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">update user by id</button>
+    </form>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>

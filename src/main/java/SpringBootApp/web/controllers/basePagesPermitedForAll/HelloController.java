@@ -19,7 +19,7 @@ public class HelloController {
 
     @GetMapping("/")
     public String indexPage(){
-        return "/index";
+        return "/test";
     }
 
 
@@ -34,6 +34,11 @@ public class HelloController {
         user.addRole("USER");
         userService.add(user);
         return "/login";
+    }
+
+    @GetMapping("/test")
+    public String globalPage(){
+        return "/test";
     }
 
     @ExceptionHandler(HibernateException.class)

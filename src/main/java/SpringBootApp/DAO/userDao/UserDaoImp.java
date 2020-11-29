@@ -54,11 +54,11 @@ public class UserDaoImp implements UserDao{
         User user = (User) em.find(User.class, id);
         return user;
     }
+
     @Override
     public void mergeUser(User user){
         em.merge(user);
     }
-
 
 
 }

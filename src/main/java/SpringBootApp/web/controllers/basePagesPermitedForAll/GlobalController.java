@@ -1,27 +1,25 @@
-package SpringBootApp.web.controllers.roleAdminController;
+/*
+package SpringBootApp.web.controllers.basePagesPermitedForAll;
 
 import SpringBootApp.model.Role;
 import SpringBootApp.model.User;
-import org.hibernate.HibernateException;
+import SpringBootApp.service.roleService.RoleService;
+import SpringBootApp.service.userService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import SpringBootApp.service.userService.UserService;
-import SpringBootApp.service.roleService.RoleService;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+public class GlobalController {
+
     @Autowired
     private UserService userService;
 
@@ -36,14 +34,21 @@ public class AdminController {
     @Qualifier("availableRoles")
     List<String> availableRoles;
 
+    @GetMapping("/")
+    public String indexPage( Model model){
+        model.addAttribute("user", new User());
+        model.addAttribute("updatableUser" , new User());
+        model.addAttribute("accountBlockValue",accountBlockValue);
+        model.addAttribute("rolesList" , availableRoles);
+        model.addAttribute("usersList" , userService.listUsers());
+        return "/test";
+    }
 
-
-    @GetMapping("/users/add")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String newUser( Model model ) {
-        model.addAttribute("user" , new User());
-        model.addAttribute("roles" , availableRoles);
-        return "add";
+    @PostMapping("/register")
+    public String registerNewUser(@ModelAttribute("user") User user){
+        user.addRole("USER");
+        userService.add(user);
+        return "/login";
     }
 
     @PostMapping("users/add")
@@ -62,30 +67,6 @@ public class AdminController {
 
     }
 
-    @GetMapping("/")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String retrieveAllUsersFromDataBase( Model model ) {
-        model.addAttribute("usersList" , userService.listUsers());
-        return "test";
-    }
-
-    @GetMapping("users/delete")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String deleteUserGetController(){
-        return "/delete";
-    }
-
-
-
-    @GetMapping("users/update")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String updateUserDetailsGetController(Model model){
-        model.addAttribute("updatableUser" , new User());
-        model.addAttribute("accountBlockValue",accountBlockValue);
-        model.addAttribute("rolesList" , availableRoles);
-        return "update";
-    }
-
     @PostMapping("users/update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String updateUserDetailsPostController(@ModelAttribute("updatableUser") User user
@@ -102,14 +83,11 @@ public class AdminController {
         return "successupd";
     }
 
-    @ExceptionHandler(HibernateException.class)
-    public String constraintExceptionHandler(){
-        return "constraintusername";
-    }
-
-    @ExceptionHandler(NumberFormatException.class)
-    public String idFormatExceptionHandler(){
-        return "numberformatexc";
+    @PostMapping("users/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String deleteUserPostController(@RequestParam("id") String id){
+        userService.deleteUserById(Long.parseLong(id));
+        return "successdel";
     }
 }
-
+*/
