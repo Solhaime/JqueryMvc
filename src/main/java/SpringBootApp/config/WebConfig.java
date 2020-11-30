@@ -1,5 +1,6 @@
 package SpringBootApp.config;
 
+import SpringBootApp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,9 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 //@EnableWebMvc
@@ -77,4 +80,20 @@ public class WebConfig implements WebMvcConfigurer {
         isActive.add("false");
         return isActive;
     }
+
+/*    @Bean
+    public Map<String,? extends Object> modelMap(){
+        Map<String,? extends Object> model = new HashMap<>();
+        model.add("id", user.getId());
+        model.addAttribute("name", user.getName());
+        model.addAttribute("lastname",user.getLastname());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("password", user.getPassword());
+        model.addAttribute("Authorities", user.getRolesString());
+        model.addAttribute("user", new User());
+        model.addAttribute("updatableUser" , new User());
+        model.addAttribute("accountBlockValue",accountBlockValue);
+        model.addAttribute("rolesList" , availableRoles);
+        model.addAttribute("usersList" , userService.listUsers());
+    }*/
 }

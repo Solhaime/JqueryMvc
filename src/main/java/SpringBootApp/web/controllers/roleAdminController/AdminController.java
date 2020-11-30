@@ -1,3 +1,4 @@
+/*
 package SpringBootApp.web.controllers.roleAdminController;
 
 import SpringBootApp.model.Role;
@@ -76,6 +77,13 @@ public class AdminController {
         return "/delete";
     }
 
+    @PostMapping("users/delete")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String deleteUserPostController(@RequestParam("id") String id){
+        userService.deleteUserById(Long.parseLong(id));
+        return "successdel";
+    }
+
 
 
     @GetMapping("users/update")
@@ -115,3 +123,4 @@ public class AdminController {
 
 }
 
+*/

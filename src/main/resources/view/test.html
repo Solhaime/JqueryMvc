@@ -15,8 +15,11 @@
     </style>
 </head>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" sec:authentication="name">Admin1</a>
-    <a class="navbar-brand" sec:authorize="isAuthenticated()" sec:authentication="principal.authorities">USER</a>
+    <ul class="list-inline">
+        <li class="list-inline-item"> <a class="navbar-brand font-weight-bolder" sec:authorize="isAuthenticated()" sec:authentication="name">Admin1</a></li>
+        <li class="list-inline-item"><h5 class="text-light font-weight-light">with roles:</h5></li>
+        <li class="list-inline-item"><a class="navbar-brand" sec:authorize="isAuthenticated()" sec:authentication="principal.authorities">USER</a></li>
+    </ul>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -52,17 +55,17 @@
             <p>Something x2</p>
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link active" href="#adminBar" role="tab" data-toggle="pill">Admin</a>
+                    <a class="nav-link" href="#adminBar" role="tab" data-toggle="pill">Admin</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#user" role="tab" data-toggle="pill">User</a>
+                    <a class="nav-link  active" href="#user" role="tab" data-toggle="pill">User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
         </div>
         <div class="col-sm-8">
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="adminBar">
+                <div role="tabpanel" class="tab-pane" id="adminBar">
                     <div class="tab-content" sec:authorize="hasAuthority('ADMIN')">
             <h2>Admin panel</h2>
             <ul class="nav nav-tabs">
@@ -104,17 +107,26 @@
 
                                 <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Modal Heading</h4>
+                                    <h4 class="modal-title">Delete user</h4>
                                     <button type="button" class="close" data-dismiss="modal">×</button>
                                 </div>
 
                                 <!-- Modal body -->
                                 <div class="modal-body">
-                                    Modal body..
+                                    <div class="container">
+                                        <form class="form-signin" method="post" action="/delete" id="del">
+                                            <h2 class="form-signin-heading">Provide id of user you want to delete</h2>
+                                            <p>
+                                                <label for="id" class="sr-only">Id</label>
+                                                <input type="text" id="id" name="id" class="form-control" placeholder="id of user" required="" autofocus="">
+                                            </p>
+                                        </form>
+                                    </div>
                                 </div>
 
                                 <!-- Modal footer -->
                                 <div class="modal-footer">
+                                    <button class="btn btn-danger" type="submit" form="del">delete</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
 
@@ -134,27 +146,27 @@
                                 <!-- Modal body -->
                                 <div class="modal-body">
                                     <div class="container">
-                                        <form th:method="POST" th:action="@{update}" th:object="${updatableUser}">
+                                        <form th:method="POST" th:action="@{update}" th:object="${updatableUser}" id="upd">
 
                                             <p>
-                                                <label for="id" class="sr-only">Id</label>
-                                                <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="id" required="" autofocus=""/>
+                                                <label for="id1" class="sr-only">Id</label>
+                                                <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="id1" required=""/>
                                             </p>
                                             <p>
-                                                <label for="username" class="sr-only">Username</label>
-                                                <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required="" autofocus=""/>
+                                                <label for="username1" class="sr-only">Username</label>
+                                                <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username1" required=""/>
                                             </p>
                                             <p>
-                                                <label for="password" class="sr-only">Password</label>
-                                                <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
+                                                <label for="password1" class="sr-only">Password</label>
+                                                <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password1" required=""/>
                                             </p>
                                             <p>
-                                                <label for="name" class="sr-only">Name</label>
-                                                <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name" required=""/>
+                                                <label for="name1" class="sr-only">Name</label>
+                                                <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name1" required=""/>
                                             </p>
                                             <p>
-                                                <label for="lastname" class="sr-only">Lastname</label>
-                                                <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname" required=""/>
+                                                <label for="lastname1" class="sr-only">Lastname</label>
+                                                <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname1" required=""/>
                                             </p>
                                             <div class="form-group">
                                                 <label for="sel2">Is active user (set false if you want to block):</label>
@@ -174,7 +186,7 @@
 
                                 <!-- Modal footer -->
                                 <div class="modal-footer">
-                                    <button class="btn  btn-primary" type="submit" >update</button>
+                                    <button class="btn  btn-success" type="submit" form="upd">update</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
 
@@ -218,7 +230,7 @@
                     </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="user">
+                <div role="tabpanel" class="tab-pane active" id="user">
                     <h2>User information-page</h2>
                     <table class="table table-hover">
                         <thead>

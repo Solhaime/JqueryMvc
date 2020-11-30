@@ -1,3 +1,4 @@
+/*
 package SpringBootApp.web.controllers.roleUserController;
 
 
@@ -22,7 +23,9 @@ public class UserController {
     @GetMapping("/")
     public String currentUserName(Principal principal, Model model) {
         User user = userService.getUserByUsername(principal.getName());
-        /*model.addAttribute("userDetail", user.toString())*/
+        */
+/*model.addAttribute("userDetail", user.toString())*//*
+
         model.addAttribute("id", user.getId());
         model.addAttribute("name", user.getName());
         model.addAttribute("lastname",user.getLastname());
@@ -37,6 +40,7 @@ public class UserController {
 
 
 
+*/
 /*@PostMapping
     public String createUser( @RequestParam("name") String name,@RequestParam("lastname") String lastname, Model model){
         AnnotationConfigApplicationContext context =
@@ -44,6 +48,8 @@ public class UserController {
         UserService bean = context.getBean(UserService.class);
         bean.add(new User(name, lastname));
         model.addAttribute()
-    }*/
+    }*//*
+
 }
 
+*/
