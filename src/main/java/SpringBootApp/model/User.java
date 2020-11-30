@@ -1,5 +1,9 @@
 package SpringBootApp.model;
 
+import SpringBootApp.config.CustomDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,7 +34,6 @@ public class User implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
-
 
     private String password;
 
@@ -63,6 +66,16 @@ public class User implements UserDetails {
         this.lastname = lastname;
         this.username = username;
         this.password = password;
+        this.roles = roles;
+    }
+
+    public User( Long id , String name , String lastname , String username , String password , boolean isActive , Set<Role> roles ) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.isActive = isActive;
         this.roles = roles;
     }
 
@@ -177,5 +190,9 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", roles=" + getRolesString() +
                 '}';
+    }
+
+    public void setRoles( Set<Role> roles ) {
+        this.roles = roles;
     }
 }

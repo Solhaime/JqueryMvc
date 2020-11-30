@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/view/main.js"></script>
     <style>
         .fakeimg {
             height: 200px;
@@ -70,15 +71,15 @@
             <h2>Admin panel</h2>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#admin" role="tab" data-toggle="pill">Users table</a>
+                    <a class="nav-link active" href="#mainTable" role="tab" data-toggle="pill">Users table</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#newUser" role="tab" data-toggle="pill">New User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
-                <div role="tabpanel" class="tab-pane active" id="admin">
-            <table class="table table-hover">
+                <div role="tabpanel" class="tab-pane active" id="mainTable">
+            <table class="table table-hover" id="allUsersTable">
                 <thead>
                 <tr class="active">
                     <th> id </th>
@@ -101,98 +102,7 @@
                     <td><span th:text="${user.isActiveString()}"> is Active </span></td>
                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">delete</button></td>
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">edit</button></td>
-                    <div class="modal fade" id="delete">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
 
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Delete user</h4>
-                                    <button type="button" class="close" data-dismiss="modal">×</button>
-                                </div>
-
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <div class="container">
-                                        <form class="form-signin" method="post" action="/delete" id="del">
-                                            <h2 class="form-signin-heading">Provide id of user you want to delete</h2>
-                                            <p>
-                                                <label for="id" class="sr-only">Id</label>
-                                                <input type="text" id="id" name="id" class="form-control" placeholder="id of user" required="" autofocus="">
-                                            </p>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <!-- Modal footer -->
-                                <div class="modal-footer">
-                                    <button class="btn btn-danger" type="submit" form="del">delete</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="edit">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Edit user</h4>
-                                    <button type="button" class="close" data-dismiss="modal">×</button>
-                                </div>
-
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <div class="container">
-                                        <form th:method="POST" th:action="@{update}" th:object="${updatableUser}" id="upd">
-
-                                            <p>
-                                                <label for="id1" class="sr-only">Id</label>
-                                                <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="id1" required=""/>
-                                            </p>
-                                            <p>
-                                                <label for="username1" class="sr-only">Username</label>
-                                                <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username1" required=""/>
-                                            </p>
-                                            <p>
-                                                <label for="password1" class="sr-only">Password</label>
-                                                <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password1" required=""/>
-                                            </p>
-                                            <p>
-                                                <label for="name1" class="sr-only">Name</label>
-                                                <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name1" required=""/>
-                                            </p>
-                                            <p>
-                                                <label for="lastname1" class="sr-only">Lastname</label>
-                                                <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname1" required=""/>
-                                            </p>
-                                            <div class="form-group">
-                                                <label for="sel2">Is active user (set false if you want to block):</label>
-                                                <select name="isActive" class="form-control" id="sel2"  required="">
-                                                    <option th:each="role : ${accountBlockValue}" th:text="${role}"></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sel3">Select role:</label>
-                                                <select multiple size="2" name="roleName" class="form-control" id="sel3"  required="">
-                                                    <option th:each="role : ${rolesList}"  th:text="${role}"></option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <!-- Modal footer -->
-                                <div class="modal-footer">
-                                    <button class="btn  btn-success" type="submit" form="upd">update</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </tr>
                 </tbody>
             </table>
@@ -223,8 +133,7 @@
                                         <option th:each="role : ${rolesList}" th:text="${role}"></option>
                                     </select>
                                 </div>
-                                <button type="sumbit" class="btn bth-lg btn-success">add</button>
-
+                                <button type="sumbit" class="btn bth-lg btn-success" id="newUserButton">add</button>
                             </form>
                         </div>
                     </div>
@@ -302,7 +211,98 @@
 <div class="jumbotron text-center" style="margin-bottom:0">
     <p>Footer</p>
 </div>
+<div class="modal fade" id="delete">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Delete user</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="container">
+                    <form class="form-signin" method="post" action="/delete" id="del">
+                        <h2 class="form-signin-heading">Provide id of user you want to delete</h2>
+                        <p>
+                            <label for="id" class="sr-only">Id</label>
+                            <input type="text" id="id" name="id" class="form-control" placeholder="id of user" required="" autofocus="">
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="submit" form="del" id="deleteButton">delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit user</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="container">
+                    <form th:method="POST" th:action="@{update}" th:object="${updatableUser}" id="upd">
+
+                        <p>
+                            <label for="idUserUpdate" class="sr-only">Id</label>
+                            <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="idUserUpdate" required=""/>
+                        </p>
+                        <p>
+                            <label for="userNameUpdate" class="sr-only">Username</label>
+                            <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="userNameUpdate" required=""/>
+                        </p>
+                        <p>
+                            <label for="passwordUpdate" class="sr-only">Password</label>
+                            <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="passwordUpdate" required=""/>
+                        </p>
+                        <p>
+                            <label for="nameUpdate" class="sr-only">Name</label>
+                            <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="nameUpdate" required=""/>
+                        </p>
+                        <p>
+                            <label for="lastnameUpdate" class="sr-only">Lastname</label>
+                            <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastnameUpdate" required=""/>
+                        </p>
+                        <div class="form-group">
+                            <label for="isActiveUpdate">Is active user (set false if you want to block):</label>
+                            <select name="isActive" class="form-control" id="isActiveUpdate"  required="">
+                                <option th:each="role : ${accountBlockValue}" th:text="${role}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="userRoleUpdate">Select role:</label>
+                            <select multiple size="2" name="roleName" class="form-control" id="userRoleUpdate"  required="">
+                                <option th:each="role : ${rolesList}"  th:text="${role}"></option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button class="btn  btn-success" type="submit" form="upd" id="updateButton" onclick="updateUser()">update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-package SpringBootApp.web.controllers.basePagesPermitedForAll;
+package SpringBootApp.web.controllers.helloController;
 
 import SpringBootApp.model.Role;
 import SpringBootApp.model.User;
