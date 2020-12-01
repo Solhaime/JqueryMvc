@@ -4,10 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/view/main.js"></script>
     <style>
         .fakeimg {
             height: 200px;
@@ -56,29 +52,29 @@
             <p>Something x2</p>
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" href="#adminBar" role="tab" data-toggle="pill">Admin</a>
+                    <a th:class="${'nav-link '+(#authorization.expression('hasAuthority(''ADMIN'')')?'active':'')}" data-toggle="pill" href="#adminBar">Admin</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  active" href="#user" role="tab" data-toggle="pill">User</a>
+                    <a th:class="${'nav-link '+(#authorization.expression('hasAuthority(''ADMIN'')')?'':'active')}" data-toggle="pill" href="#user">User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
         </div>
         <div class="col-sm-8">
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane" id="adminBar">
+                <div role="tabpanel" th:class="${'tab-pane '+(#authorization.expression('hasAuthority(''ADMIN'')')?'active':'')}" id="adminBar">
                     <div class="tab-content" sec:authorize="hasAuthority('ADMIN')">
             <h2>Admin panel</h2>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#mainTable" role="tab" data-toggle="pill">Users table</a>
+                    <a th:class="${'nav-link '+(#authorization.expression('hasAuthority(''ADMIN'')')?'active':'')}" href="#mainTable" role="tab" data-toggle="pill">Users table</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#newUser" role="tab" data-toggle="pill">New User</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
-                <div role="tabpanel" class="tab-pane active" id="mainTable">
+                <div role="tabpanel" th:class="${'tab-pane '+(#authorization.expression('hasAuthority(''ADMIN'')')?'active':'')}" id="mainTable">
             <table class="table table-hover" id="allUsersTable">
                 <thead>
                 <tr class="active">
@@ -94,14 +90,14 @@
                 </thead>
                 <tbody>
                 <tr th:each="user : ${usersList}">
-                    <td><span th:text="${user.id}"> Id </span></td>
+                    <td class="uLId"><span th:text="${user.id}" id="idFromMainTable"> Id </span></td>
                     <td><span th:text="${user.name}"> Name </span></td>
                     <td><span th:text="${user.lastname}"> Lastname </span></td>
                     <td><span th:text="${user.username}"> Username </span></td>
                     <td><span th:text="${user.getRolesString()}"> Role </span></td>
                     <td><span th:text="${user.isActiveString()}"> is Active </span></td>
                     <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">delete</button></td>
-                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">edit</button></td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit" id="btnEdit" onclick="editButtonEventListener()">edit</button></td>
 
                 </tr>
                 </tbody>
@@ -133,13 +129,13 @@
                                         <option th:each="role : ${rolesList}" th:text="${role}"></option>
                                     </select>
                                 </div>
-                                <button type="sumbit" class="btn bth-lg btn-success" id="newUserButton">add</button>
+                                <button type="sumbit" class="btn bth-lg btn-success" id="newUserButton" onclick="addUser()">add</button>
                             </form>
                         </div>
                     </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="user">
+                <div role="tabpanel" th:class="${'tab-pane '+(#authorization.expression('hasAuthority(''ADMIN'')')?'':'active')}" id="user">
                     <h2>User information-page</h2>
                     <table class="table table-hover">
                         <thead>
@@ -260,7 +256,7 @@
 
                         <p>
                             <label for="idUserUpdate" class="sr-only">Id</label>
-                            <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="idUserUpdate" required=""/>
+                            <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="idUserUpdate" required="" disabled=""/>
                         </p>
                         <p>
                             <label for="userNameUpdate" class="sr-only">Username</label>
@@ -296,13 +292,17 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button class="btn  btn-success" type="submit" form="upd" id="updateButton" onclick="updateUser()">update</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn  btn-success" type="submit" form="upd" id="updateButton" onclick="updateUser()" data-dismiss="modal">update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="RefreshTable()">Close</button>
             </div>
 
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/view/main.js"></script>
 </body>
 </html>
 

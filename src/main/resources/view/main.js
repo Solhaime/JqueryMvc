@@ -2,6 +2,16 @@ $(document).ready(function () {
     $('#upd').submit(function(event){
         event.preventDefault();
     });
+    $('#newUser').submit(function(event){
+        event.preventDefault();
+    });
+   /* $('.openPopup').on('click',function(){
+        var dataURL = $(this).attr('data-href');
+        $('.modal-body').load("/api/restful/users/{id}",function(){
+            $('#edit').modal({show:true});
+        });
+    });*/
+    editButtonEventListener();
 
 });
 
@@ -17,6 +27,33 @@ function getAllUsers() {
     })
 }
 
+function editButtonEventListener(){
+    $('.btn-success').click(function() {
+        let id = $(this).parents('tr').find('.uLId').text();
+        getUserById(id);
+    });
+}
+
+function getUserById(id) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/restful/users/'+Number(id),
+        async:false,
+        success: function (data) {
+            console.log('success', data);
+                $('#idUserUpdate').val(data['id']),
+                    $('#userNameUpdate').val(data['username']),
+                    $('#nameUpdate').val(data['name']),
+                    $('#lastnameUpdate').val(data['lastname'])/*,
+                    $('#passwordUpdate').val(data['password']),
+                    $('#userRoleUpdate').val(data['roles']),
+                    $('#isActiveUpdate').val(data['isActive'])*/;
+        }
+    })
+}
+
+
+
 function updateUser() {
     let request = serializeUserForm();
     $.ajax({
@@ -26,7 +63,7 @@ function updateUser() {
         data: request,
         success: function (response) {
             console.log("user successfully updated " + request);
-            fillUsersTable(getAllUsers());
+            RefreshTable();
         },
         error: function (data) {
             console.log("user update is failed " + request);
@@ -48,7 +85,9 @@ function serializeUserForm() {
     })
 
 }
-function fillUsersTable(usersData){
+
+
+/*function fillUsersTable(usersData){
     let tableContent ='';
     $.each(usersData,function (counter, data) {
         tableContent=tableContent+'<tr class="active">' +
@@ -79,4 +118,33 @@ function fillUsersTable(usersData){
     '                </thead>' +
     '                <tbody>'+tableContent+'</tbody>'
         );
+}*/
+
+function addUser() {
+    let request = serializeUserForm();
+    $.ajax({
+        type: 'POST',
+        url: '/api/restful/users/add/',
+        contentType: "application/json",
+        data: request,
+        success: function (response) {
+            console.log("user successfully added " + request);
+            RefreshTable();
+        },
+        error: function (data) {
+            console.log("user update is failed " + request);
+        }
+
+    })
+}
+/*
+function fillUsersTable() {
+    setTimeout(function () {
+        $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
+    }, 2000);
+}*/
+
+function RefreshTable() {
+    $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
+    console.log("message");
 }

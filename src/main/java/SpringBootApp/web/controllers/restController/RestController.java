@@ -27,7 +27,7 @@ public class RestController {
     @Autowired
     RoleService roleService;
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public boolean delete(@PathVariable Long id){
        userService.deleteUserById(id);
         return true;
