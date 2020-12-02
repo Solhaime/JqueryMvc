@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .fakeimg {
-            height: 200px;
-            background: #aaa;
+        .colortext {
+            background-color: #ffffcc;
         }
     </style>
 </head>
@@ -109,11 +108,11 @@
                                 <h4 class="form-signin-heading">Add a new user</h4>
                                 <p>
                                     <label for="usernameCreate" class="sr-only">Username</label>
-                                    <input type="text" name="username" class="form-control bg-warning text-black" th:field="*{username}" placeholder="Username" id="usernameCreate" required=""/>
+                                    <input type="text" name="username" class="form-control colortext" th:field="*{username}" placeholder="Username" id="usernameCreate" required=""/>
                                 </p>
                                 <p>
                                     <label for="passwordCreate" class="sr-only">Password</label>
-                                    <input type="password" name="password" class="form-control bg-warning text-black" th:field="*{password}" placeholder="Password" id="passwordCreate" required=""/>
+                                    <input type="password" name="password" class="form-control colortext" th:field="*{password}" placeholder="Password" id="passwordCreate" required=""/>
                                 </p>
                                 <p>
                                     <label for="nameCreate" class="sr-only">Name</label>
@@ -239,23 +238,23 @@
                     <form th:method="POST" th:action="@{update}" th:object="${updatableUser}" id="upd">
 
                         <p>
-                            <label for="idUserUpdate" class="sr-only">Id</label>
+                            <label for="idUserUpdate" >Id:</label>
                             <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="idUserUpdate" required="" disabled=""/>
                         </p>
                         <p>
-                            <label for="userNameUpdate" class="sr-only">Username</label>
+                            <label for="userNameUpdate" >Username:</label>
                             <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="userNameUpdate" required=""/>
                         </p>
                         <p>
-                            <label for="passwordUpdate" class="sr-only">Password</label>
+                            <label for="passwordUpdate" >Password:</label>
                             <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="passwordUpdate" required=""/>
                         </p>
                         <p>
-                            <label for="nameUpdate" class="sr-only">Name</label>
+                            <label for="nameUpdate">Name:</label>
                             <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="nameUpdate" required=""/>
                         </p>
                         <p>
-                            <label for="lastnameUpdate" class="sr-only">Lastname</label>
+                            <label for="lastnameUpdate">Lastname:</label>
                             <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastnameUpdate" required=""/>
                         </p>
                         <div class="form-group">

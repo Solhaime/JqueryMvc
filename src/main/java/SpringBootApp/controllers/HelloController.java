@@ -58,7 +58,7 @@ public class HelloController {
         userService.add(user);
         return "/login";
     }
-    
+
 
     @GetMapping("/test")
     public String indexPage( Model model, Principal principal ){
