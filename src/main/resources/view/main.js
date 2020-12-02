@@ -9,23 +9,54 @@ $(document).ready(function () {
         event.preventDefault();
     });
     editButtonEventListener();
+    $('.btn-success').click(function() {
+        let id = $(this).parents('tr').find('.uLId').text();
+        fillModalUpdate(id);
+    });
     deleteButtonEventListener();
+    $('.btn-danger').click(function() {
+        let id = $(this).parents('tr').find('.uLId').text();
+        fillModalDelete(id);
+    });
     $("#successAlert").hide();
     $("#failAlert").hide();
 
+    $('#newUserButton').attr('disabled',true);
+    $('#usernameCreate').keyup(function(){
+        if($(this).val().length !==0)
+            $('#newUserButton').attr('disabled', false);
+        else
+            $('#newUserButton').attr('disabled',true);
+    })
+
 });
 
-function getAllUsers() {
-    $.ajax({
-        type: 'GET',
-        url: '/api/restful/users/all',
-        success: function (data) {
-            console.log('success', data);
-            $.each(data, function (i, item) {
-            })
-        }
+//Util
+function serializeUserFormUpd() {
+    return JSON.stringify( {
+        'id':Number($('#idUserUpdate').val()),
+        'name': $('#nameUpdate').val(),
+        'lastname': $('#lastnameUpdate').val(),
+        'username': $('#userNameUpdate').val(),
+        'password': $('#passwordUpdate').val(),
+        'roles': $('#userRoleUpdate').val(),
+        'isActive': $('#isActiveUpdate').val()
+
     })
+
 }
+
+function serializeUserFormAdd() {
+    return JSON.stringify( {
+        'name': $('#nameCreate').val(),
+        'lastname': $('#lastnameCreate').val(),
+        'username': $('#usernameCreate').val(),
+        'password': $('#passwordCreate').val(),
+        'roles': $('#userRoleCreate').val()
+    })
+
+}
+
 
 function editButtonEventListener(){
     $('.btn-success').click(function() {
@@ -48,12 +79,14 @@ function fillModalUpdate(id) {
         }
     })
 }
+
 function deleteButtonEventListener(){
     $('.btn-danger').click(function() {
         let id = $(this).parents('tr').find('.uLId').text();
         fillModalDelete(id);
     });
 }
+
 function fillModalDelete(id) {
     $.ajax({
         type: 'GET',
@@ -68,9 +101,20 @@ function fillModalDelete(id) {
         }
     })
 }
+/*
+function fillUsersTable() {
+    setTimeout(function () {
+        $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
+    }, 2000);
+}*/
+
+function RefreshTable() {
+    $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
+    console.log("message");
+}
 
 
-
+//CRUD
 function updateUser() {
     let request = serializeUserFormUpd();
     $.ajax({
@@ -107,30 +151,6 @@ function deleteUser() {
     })
 }
 
-function serializeUserFormUpd() {
-    return JSON.stringify( {
-        'id':Number($('#idUserUpdate').val()),
-        'name': $('#nameUpdate').val(),
-        'lastname': $('#lastnameUpdate').val(),
-        'username': $('#userNameUpdate').val(),
-        'password': $('#passwordUpdate').val(),
-        'roles': $('#userRoleUpdate').val(),
-        'isActive': $('#isActiveUpdate').val()
-
-    })
-
-}
-
-function serializeUserFormAdd() {
-    return JSON.stringify( {
-        'name': $('#nameCreate').val(),
-        'lastname': $('#lastnameCreate').val(),
-        'username': $('#usernameCreate').val(),
-        'password': $('#passwordCreate').val(),
-        'roles': $('#userRoleCreate').val()
-    })
-
-}
 
 function addUser() {
     let request = serializeUserFormAdd();
@@ -153,14 +173,16 @@ function addUser() {
 
     })
 }
-/*
-function fillUsersTable() {
-    setTimeout(function () {
-        $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
-    }, 2000);
-}*/
 
-function RefreshTable() {
-    $("#allUsersTable").load("http://localhost:8080/test #allUsersTable");
-    console.log("message");
+function getAllUsers() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/restful/users/all',
+        success: function (data) {
+            console.log('success', data);
+            $.each(data, function (i, item) {
+            })
+        }
+    })
 }
+
