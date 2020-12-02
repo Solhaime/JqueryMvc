@@ -5,13 +5,13 @@ $(document).ready(function () {
     $('#newUser').submit(function(event){
         event.preventDefault();
     });
-   /* $('.openPopup').on('click',function(){
-        var dataURL = $(this).attr('data-href');
-        $('.modal-body').load("/api/restful/users/{id}",function(){
-            $('#edit').modal({show:true});
-        });
-    });*/
+    $('#del').submit(function(event){
+        event.preventDefault();
+    });
     editButtonEventListener();
+    deleteButtonEventListener();
+    $("#successAlert").hide();
+    $("#failAlert").hide();
 
 });
 
@@ -30,11 +30,11 @@ function getAllUsers() {
 function editButtonEventListener(){
     $('.btn-success').click(function() {
         let id = $(this).parents('tr').find('.uLId').text();
-        getUserById(id);
+        fillModalUpdate(id);
     });
 }
 
-function getUserById(id) {
+function fillModalUpdate(id) {
     $.ajax({
         type: 'GET',
         url: '/api/restful/users/'+Number(id),
@@ -44,10 +44,27 @@ function getUserById(id) {
                 $('#idUserUpdate').val(data['id']),
                     $('#userNameUpdate').val(data['username']),
                     $('#nameUpdate').val(data['name']),
-                    $('#lastnameUpdate').val(data['lastname'])/*,
-                    $('#passwordUpdate').val(data['password']),
-                    $('#userRoleUpdate').val(data['roles']),
-                    $('#isActiveUpdate').val(data['isActive'])*/;
+                    $('#lastnameUpdate').val(data['lastname']);
+        }
+    })
+}
+function deleteButtonEventListener(){
+    $('.btn-danger').click(function() {
+        let id = $(this).parents('tr').find('.uLId').text();
+        fillModalDelete(id);
+    });
+}
+function fillModalDelete(id) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/restful/users/'+Number(id),
+        async:false,
+        success: function (data) {
+            console.log('success', data);
+            $('#idUserDelete').val(data['id']),
+                $('#userNameDelete').val(data['username']),
+                $('#nameDelete').val(data['name']),
+                $('#lastnameDelete').val(data['lastname']);
         }
     })
 }
@@ -55,24 +72,42 @@ function getUserById(id) {
 
 
 function updateUser() {
-    let request = serializeUserForm();
+    let request = serializeUserFormUpd();
     $.ajax({
         type: 'POST',
-        url: '/api/restful/users/update/',
+        url: '/api/restful/users/update',
         contentType: "application/json",
         data: request,
         success: function (response) {
             console.log("user successfully updated " + request);
             RefreshTable();
+            editButtonEventListener();
         },
         error: function (data) {
-            console.log("user update is failed " + request);
+            console.log("failed to update user" + request);
+        }
+
+    })
+}
+function deleteUser() {
+    let id =$('#idUserDelete').val();
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/restful/users/delete/'+Number(id),
+        contentType: "application/json",
+        success: function (response) {
+            console.log("user successfully deleted " +id);
+            RefreshTable();
+            deleteButtonEventListener();
+        },
+        error: function (data) {
+            console.log("failed to delete user" + id);
         }
 
     })
 }
 
-function serializeUserForm() {
+function serializeUserFormUpd() {
     return JSON.stringify( {
         'id':Number($('#idUserUpdate').val()),
         'name': $('#nameUpdate').val(),
@@ -86,53 +121,34 @@ function serializeUserForm() {
 
 }
 
+function serializeUserFormAdd() {
+    return JSON.stringify( {
+        'name': $('#nameCreate').val(),
+        'lastname': $('#lastnameCreate').val(),
+        'username': $('#usernameCreate').val(),
+        'password': $('#passwordCreate').val(),
+        'roles': $('#userRoleCreate').val()
+    })
 
-/*function fillUsersTable(usersData){
-    let tableContent ='';
-    $.each(usersData,function (counter, data) {
-        tableContent=tableContent+'<tr class="active">' +
-        '                    <td> '+data['id']+' </td>' +
-        '                    <td> '+data['name']+' </td>' +
-        '                    <td> '+data['lastname']+' </td>' +
-        '                    <td> '+data['username']+' </td>' +
-        '                    <td> '+data['role']+' </td>' +
-        '                    <td> '+data['isActive']+'</td>' +
-        '                    <td> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">delete</button> </td>' +
-        '                    <td> <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit">edit</button> </td>' +
-        '                </tr>'
-    }
-        );
-    console.log(tableContent);
-    $('#allUsersTable').html(
-    '      <thead>' +
-    '                <tr class="active">' +
-    '                    <th> id </th>' +
-    '                    <th> name </th>' +
-    '                    <th> lastname </th>' +
-    '                    <th> username </th>' +
-    '                    <th> role </th>' +
-    '                    <th> is Active </th>' +
-    '                    <th> Delete </th>' +
-    '                    <th> Edit </th>' +
-    '                </tr>' +
-    '                </thead>' +
-    '                <tbody>'+tableContent+'</tbody>'
-        );
-}*/
+}
 
 function addUser() {
-    let request = serializeUserForm();
+    let request = serializeUserFormAdd();
     $.ajax({
         type: 'POST',
-        url: '/api/restful/users/add/',
+        url: '/api/restful/users/create',
         contentType: "application/json",
         data: request,
         success: function (response) {
             console.log("user successfully added " + request);
             RefreshTable();
+           let w = $('#successAlert').show();
+            setTimeout(function() {w.hide();}, 2000);
         },
         error: function (data) {
-            console.log("user update is failed " + request);
+            console.log("failed to add user" + request);
+            let z = $('#failAlert').show();
+            setTimeout(function() {z.hide();}, 2000);
         }
 
     })

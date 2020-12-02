@@ -96,7 +96,7 @@
                     <td><span th:text="${user.username}"> Username </span></td>
                     <td><span th:text="${user.getRolesString()}"> Role </span></td>
                     <td><span th:text="${user.isActiveString()}"> is Active </span></td>
-                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">delete</button></td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" onclick="deleteButtonEventListener()">delete</button></td>
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit" id="btnEdit" onclick="editButtonEventListener()">edit</button></td>
 
                 </tr>
@@ -108,28 +108,40 @@
                             <form th:method="POST" th:action="@{add}" th:object="${user}">
                                 <h4 class="form-signin-heading">Add a new user</h4>
                                 <p>
-                                    <label for="username" class="sr-only">Username</label>
-                                    <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required=""/>
+                                    <label for="usernameCreate" class="sr-only">Username</label>
+                                    <input type="text" name="username" class="form-control bg-warning text-black" th:field="*{username}" placeholder="Username" id="usernameCreate" required=""/>
                                 </p>
                                 <p>
-                                    <label for="password" class="sr-only">Password</label>
-                                    <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
+                                    <label for="passwordCreate" class="sr-only">Password</label>
+                                    <input type="password" name="password" class="form-control bg-warning text-black" th:field="*{password}" placeholder="Password" id="passwordCreate" required=""/>
                                 </p>
                                 <p>
-                                    <label for="name" class="sr-only">Name</label>
-                                    <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name"/>
+                                    <label for="nameCreate" class="sr-only">Name</label>
+                                    <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="nameCreate"/>
                                 </p>
                                 <p>
-                                    <label for="lastname" class="sr-only">Lastname</label>
-                                    <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname"/>
+                                    <label for="lastnameCreate" class="sr-only">Lastname</label>
+                                    <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastnameCreate"/>
                                 </p>
                                 <div class="form-group">
-                                    <label for="sel1">Select role:</label>
-                                    <select multiple size="2" name="roleName" class="form-control" id="sel1"  required="">
+                                    <label for="userRoleCreate">Select role:</label>
+                                    <select multiple size="2" name="roleName" class="form-control" id="userRoleCreate"  required="">
                                         <option th:each="role : ${rolesList}" th:text="${role}"></option>
                                     </select>
                                 </div>
                                 <button type="sumbit" class="btn bth-lg btn-success" id="newUserButton" onclick="addUser()">add</button>
+                                <div class="container" id="successAlert">
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Success!</strong>
+                                    </div>
+                                </div>
+                                <div class="container" id="failAlert">
+                                    <div class="alert alert-danger alert-dismissible fade show">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>This username is already taken!</strong>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -157,48 +169,6 @@
                         </tbody>
                     </table>
                 </div>
-<!--            <div class="modal fade" id="register">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-
-                        &lt;!&ndash; Modal Header &ndash;&gt;
-                        <div class="modal-header">
-                            <h4 class="modal-title">Registration form</h4>
-                            <button type="button" class="close" data-dismiss="modal">×</button>
-                        </div>
-
-                        &lt;!&ndash; Modal body &ndash;&gt;
-                        <div class="modal-body">
-                            <div class="container">
-                                <form th:method="POST" th:action="@{/register}" th:object="${user}">
-                                    <p>
-                                        <label for="username" class="sr-only">Username</label>
-                                        <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="username" required=""/>
-                                    </p>
-                                    <p>
-                                        <label for="password" class="sr-only">Password</label>
-                                        <input type="password" name="password" class="form-control" th:field="*{password}" placeholder="Password" id="password" required=""/>
-                                    </p>
-                                    <p>
-                                        <label for="name" class="sr-only">Name</label>
-                                        <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="name"/>
-                                    </p>
-                                    <p>
-                                        <label for="lastname" class="sr-only">Lastname</label>
-                                        <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastname"/>
-                                    </p>
-                                </form>
-                            </div>
-                        </div>
-                        &lt;!&ndash; Modal footer &ndash;&gt;
-                        <div class="modal-footer">
-                            <button class="btn btn-primary btn-success" type="submit" >Register</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>-->
              </div>
     </div>
 </div>
@@ -219,20 +189,34 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <div class="container">
-                    <form class="form-signin" method="post" action="/delete" id="del">
-                        <h2 class="form-signin-heading">Provide id of user you want to delete</h2>
-                        <p>
-                            <label for="id" class="sr-only">Id</label>
-                            <input type="text" id="id" name="id" class="form-control" placeholder="id of user" required="" autofocus="">
-                        </p>
-                    </form>
+                <div class="modal-body">
+                    <div class="container">
+                        <form th:method="POST" th:action="@{update}" th:object="${updatableUser}" id="del">
+
+                            <p>
+                                <label for="idUserDelete">Id:</label>
+                                <input type="text" name="id" class="form-control" th:field="*{id}" placeholder="Id" id="idUserDelete" required="" disabled=""/>
+                            </p>
+                            <p>
+                                <label for="userNameDelete">Username:</label>
+                                <input type="text" name="username" class="form-control" th:field="*{username}" placeholder="Username" id="userNameDelete" required="" disabled=""/>
+                            </p>
+                            <p>
+                                <label for="nameDelete">Name:</label>
+                                <input type="text" name="name" class="form-control" th:field="*{name}" placeholder="Name" id="nameDelete" required="" disabled=""/>
+                            </p>
+                            <p>
+                                <label for="lastnameDelete">Lastname:</label>
+                                <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" id="lastnameDelete" required="" disabled=""/>
+                            </p>
+                        </form>
+                    </div>
                 </div>
             </div>
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button class="btn btn-danger" type="submit" form="del" id="deleteButton">delete</button>
+                <button class="btn btn-danger" type="submit" form="del" id="deleteButton" onclick="deleteUser()" data-dismiss="modal">delete</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
 

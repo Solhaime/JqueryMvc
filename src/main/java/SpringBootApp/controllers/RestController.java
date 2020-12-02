@@ -1,4 +1,4 @@
-package SpringBootApp.web.controllers.restController;
+package SpringBootApp.controllers;
 
 
 import SpringBootApp.model.Role;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Set;
@@ -27,22 +26,39 @@ public class RestController {
     @Autowired
     RoleService roleService;
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public boolean delete(@PathVariable Long id){
        userService.deleteUserById(id);
         return true;
     }
 
-    @PostMapping("/update/")
+    @PostMapping("/update")
     public boolean update(@RequestBody User user){
-       Set<Role> list = user.getAuthorities().stream().map(x->roleService.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
-       user.setRoles(list);
+        if(user.getPassword().equals(null)) {
+            user.setPassword(userService.getUserById(user.getId()).getPassword());
+        }
+        if(user.getAuthorities().equals(null)) {
+ /*           Set<Role> collect = userService.getUserById(user.getId()).getAuthorities()
+                    .stream().map(x -> roleService.getRoleByName(x.getAuthority())).collect(Collectors.toSet());*/
+            user.setRoles(userService.getUserById(user.getId()).getRoles());
+        } else {
+            Set<Role> roles = user.getAuthorities().stream().map(x->
+                    roleService.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
+            user.setRoles(roles);
+        }
         userService.mergeUser(user);
         return true;
     }
 
-    @PostMapping("/create/")
+    @PostMapping("/create")
     public boolean add(@RequestBody User user){
+        if(user.getAuthorities().equals(null)) {
+            user.setRole(roleService.getRoleByName("USER"));
+        } else {
+            Set<Role> roles = user.getAuthorities().stream().map(x ->
+                    roleService.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
+            user.setRoles(roles);
+        }
         userService.add(user);
         return true;
     }

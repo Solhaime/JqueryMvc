@@ -1,4 +1,4 @@
-package SpringBootApp.web.handler;
+package SpringBootApp.controllers.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

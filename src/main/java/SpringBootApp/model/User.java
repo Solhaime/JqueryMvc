@@ -137,6 +137,10 @@ public class User implements UserDetails {
         return result.toString();
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
     public boolean isActive() {
         return isActive;
     }

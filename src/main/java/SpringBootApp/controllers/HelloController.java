@@ -1,4 +1,4 @@
-package SpringBootApp.web.controllers.helloController;
+package SpringBootApp.controllers;
 
 import SpringBootApp.model.Role;
 import SpringBootApp.model.User;
@@ -58,12 +58,7 @@ public class HelloController {
         userService.add(user);
         return "/login";
     }
-
-
-/*    @GetMapping("/test")
-    public String globalPage(){
-        return "/test";
-    }*/
+    
 
     @GetMapping("/test")
     public String indexPage( Model model, Principal principal ){
@@ -81,7 +76,7 @@ public class HelloController {
         map.put("rolesList" , availableRoles);
         map.put("usersList" , userService.listUsers());
         model.addAllAttributes(map);
-        return "/test";
+        return "test";
     }
     @PostMapping("/add")
     public String returnAllUsers( @ModelAttribute("user") User user,
