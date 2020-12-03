@@ -95,8 +95,8 @@
                     <td><span th:text="${user.username}"> Username </span></td>
                     <td><span th:text="${user.getRolesString()}"> Role </span></td>
                     <td><span th:text="${user.isActiveString()}"> is Active </span></td>
-                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" onclick="deleteButtonEventListener()">delete</button></td>
-                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit" id="btnEdit" onclick="editButtonEventListener()">edit</button></td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal"  id="btnDelete" onclick="deleteButtonEventListener()">delete</button></td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal"  id="btnEdit" onclick="editButtonEventListener()">edit</button></td>
 
                 </tr>
                 </tbody>
@@ -124,11 +124,11 @@
                                 </p>
                                 <div class="form-group">
                                     <label for="userRoleCreate">Select role:</label>
-                                    <select multiple size="2" name="roleName" class="form-control" id="userRoleCreate"  required="">
+                                    <select multiple size="2" name="roleName" class="form-control" id="userRoleCreate" >
                                         <option th:each="role : ${rolesList}" th:text="${role}"></option>
                                     </select>
                                 </div>
-                                <button type="sumbit" class="btn bth-lg btn-success" id="newUserButton" onclick="addUser()">add</button>
+                                <button type="sumbit" class="btn bth-lg btn-info" id="newUserButton" onclick="addUser()">add</button>
                                 <div class="container" id="successAlert">
                                     <div class="alert alert-success alert-dismissible fade show">
                                         <button type="button" class="close" data-dismiss="alert">×</button>
