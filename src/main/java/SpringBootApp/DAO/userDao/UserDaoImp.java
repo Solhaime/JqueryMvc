@@ -51,7 +51,7 @@ public class UserDaoImp implements UserDao{
 
     @Override
     public User  getUserById( Long id ) {
-        User user = (User) em.find(User.class, id);
+        User user = em.find(User.class, id);
         return user;
     }
 

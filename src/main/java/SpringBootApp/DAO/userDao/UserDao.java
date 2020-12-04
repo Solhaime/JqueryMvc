@@ -1,6 +1,7 @@
 package SpringBootApp.DAO.userDao;
 
 import SpringBootApp.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
