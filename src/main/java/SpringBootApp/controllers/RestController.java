@@ -28,39 +28,42 @@ public class RestController {
     RoleService roleService;
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-       userService.deleteUserById(id);
+    public ResponseEntity<Void> delete( @PathVariable Long id ) {
+        // userService.deleteUserById(id);
+        userService.springDataDeleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Void> update(@RequestBody User user){
-        userService.mergeUser(user);
+    public ResponseEntity<Void> update( @RequestBody User user ) {
+        //    userService.mergeUser(user);
+        userService.springDataMerge(user);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> add(@RequestBody User user){
-        userService.add(user);
+    public ResponseEntity<Void> add( @RequestBody User user ) {
+        //   userService.add(user);
+        userService.springDataSave(user);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping("/all")
-    public ResponseEntity<List> getAll(){
-       return ResponseEntity.ok(userService.listUsers());
-
+    public ResponseEntity<List> getAll() {
+        // return ResponseEntity.ok(userService.listUsers());
+        return ResponseEntity.ok(userService.springDataFindAll());
     }
 
     @RequestMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getUserById(id));
-
+    public ResponseEntity<User> getById( @PathVariable Long id ) {
+        // return ResponseEntity.ok(userService.getUserById(id));
+        return ResponseEntity.ok(userService.springDataGetById(id));
     }
 
     @RequestMapping("/byUsername/{username}")
-    public ResponseEntity<User> getByUsername( @PathVariable String username){
-        return ResponseEntity.ok(userService.getUserByUsername(username));
-
+    public ResponseEntity<User> getByUsername( @PathVariable String username ) {
+        //  return ResponseEntity.ok(userService.getUserByUsername(username));
+        return ResponseEntity.ok(userService.springDataGetByName(username));
     }
 
 }

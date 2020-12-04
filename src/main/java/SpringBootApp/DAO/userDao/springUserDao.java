@@ -9,4 +9,6 @@ public interface springUserDao extends JpaRepository<User, Long> {
 
     @Query("select user from User user where user.username =:username")
     User getByUsername(@Param("username") String username);
+/*    @Query("delete distinct user from User user where user.username =:username")
+    void deleteById(Long id);*/
 }

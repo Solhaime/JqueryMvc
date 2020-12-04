@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
 
     @ManyToMany(cascade =
-            CascadeType.ALL, fetch= FetchType.LAZY)
+            CascadeType.PERSIST, fetch= FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 
     public User() {

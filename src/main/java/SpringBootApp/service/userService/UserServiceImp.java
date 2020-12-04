@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,10 +32,10 @@ public class UserServiceImp implements UserService {
     private RoleService roleService;
 
     @Autowired
-    private springUserDao springDataUser;
+    private springUserDao springDataUserDAO;
 
     @Autowired
-    private springRoleDao springDataRole;
+    private springRoleDao springDataRoleDAO;
 
     @Transactional
     @Override
@@ -104,51 +105,53 @@ public class UserServiceImp implements UserService {
 
     //Spring Data
 
-    public List<User> findAll(){
-        return springDataUser.findAll();
+    public List<User> springDataFindAll(){
+        return springDataUserDAO.findAll();
     }
 
 
     @Transactional
-    public void saveUser(User user) {
+    public void springDataSave( User user) {
+//           springDataRoleDAO.findAll().stream().collect(Collectors.toMap(p ->p.getName(), p -> p.getId()));
         if(user.getAuthorities().isEmpty()) {
-            user.setRole(springDataRole.getRoleByName("USER"));
+            user.setRole(springDataRoleDAO.getRoleByName("USER"));
         } else {
             Set<Role> roles = (user.getAuthorities().stream().map(x ->
-                    springDataRole.getRoleByName(x.getAuthority()))).collect(Collectors.toSet());
+                    springDataRoleDAO.getRoleByName(x.getAuthority()))).collect(Collectors.toSet());//TODO одним запросом?
             user.setRoles(roles);
         }
         user.setPassword(encodePassword(user.getPassword()));
-        springDataUser.save(user);
+        springDataUserDAO.save(user);
     }
 
-    public User getByUsername(String username){
-      return springDataUser.getByUsername(username);
+    public User springDataGetByName( String username){
+      return springDataUserDAO.getByUsername(username);
     }
 
-    public User getById( Long id){
-        return springDataUser.findById(id).get();
+    public User springDataGetById( Long id){
+        return springDataUserDAO.findById(id).get();
     }
 
     @Transactional
-    public void deleteById(Long id){
-        springDataUser.deleteById(id);
+    public void springDataDeleteById( Long id){
+        springDataUserDAO.deleteById(id);
     }
-    
+
     @Transactional
-    public void mergeData( User user){
+    public void springDataMerge( User user){
         if(user.getPassword().isEmpty()) {
-            user.setPassword(getById(user.getId()).getPassword());
+            user.setPassword(springDataGetById(user.getId()).getPassword());
         } else {
             user.setPassword(encodePassword(user.getPassword()));
         }
         if(user.getAuthorities().isEmpty()) {
-            user.setRoles(getById(user.getId()).getRoles());
+            user.setRoles(springDataGetById(user.getId()).getRoles());
         } else {
             Set<Role> roles = user.getAuthorities().stream().map(x->
-                    springDataRole.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
+                    springDataRoleDAO.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
             user.setRoles(roles);
         }
+        springDataUserDAO.save(user);
     }
 
 }

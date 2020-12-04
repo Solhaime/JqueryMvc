@@ -48,4 +48,8 @@ public class Role implements GrantedAuthority {
     public String toString() {
         return name;
     }
+
+    public void setId( Long id ) {
+        this.id = id;
+    }
 }
