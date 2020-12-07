@@ -63,7 +63,7 @@ public class RestController {
     @RequestMapping("/byUsername/{username}")
     public ResponseEntity<User> getByUsername( @PathVariable String username ) {
         //  return ResponseEntity.ok(userService.getUserByUsername(username));
-        return ResponseEntity.ok(userService.springDataGetByName(username));
+        return ResponseEntity.ok(userService.springDataGetByName(username).get());
     }
 
 }

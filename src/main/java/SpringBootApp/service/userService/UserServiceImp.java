@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,7 +123,7 @@ public class UserServiceImp implements UserService {
         springDataUserDAO.save(user);
     }
 
-    public User springDataGetByName( String username){
+    public Optional<User> springDataGetByName( String username){
       return springDataUserDAO.getByUsername(username);
     }
 
