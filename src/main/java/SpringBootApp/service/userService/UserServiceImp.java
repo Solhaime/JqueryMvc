@@ -153,4 +153,11 @@ public class UserServiceImp implements UserService {
         springDataUserDAO.save(user);
     }
 
+    public void springDataChangeUserPassword(User user){
+        String password = user.getPassword();
+        user = springDataUserDAO.findById(user.getId()).get();
+        user.setPassword(passwordEncoder.encode(password));
+        springDataUserDAO.save(user);
+    }
+
 }

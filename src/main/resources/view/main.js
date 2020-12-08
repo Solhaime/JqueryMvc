@@ -48,6 +48,13 @@ function serializeUserFormAdd() {
     })
 
 }
+function serializeUserFormChangePassword() {
+    return JSON.stringify({
+        'id': Number($('#idChangePassword').val()),
+        'password': $('#userPasswordChangeable').val()
+    })
+
+}
 
 
 function editButtonEventListener() {
@@ -55,6 +62,25 @@ function editButtonEventListener() {
         let id = $(this).parents('tr').find('.uLId').text();
         fillModalUpdate(id);
     });
+}
+function passwordChangeButtonEventListener() {
+    $('.btn-warning').click(function () {
+        let id = $(this).parents('tr').find('.uId').text();
+        fillModalChangePassword(id);
+    });
+}
+function fillModalChangePassword(id) {
+    $.ajax({
+        type: 'GET',
+        url: '/api/restful/users/' + Number(id),
+        async: false,
+        success: function (data) {
+            console.log('success', data);
+            $('#idChangePassword').val(data['id']);
+
+        }
+    })
+    $('#changePassword').modal('show');
 }
 
 function fillModalUpdate(id) {
@@ -122,6 +148,22 @@ function updateUser() {
         success: function (response) {
             console.log("user successfully updated " + request);
             RefreshTable();
+        },
+        error: function (data) {
+            console.log("failed to update user" + request);
+        }
+
+    })
+}
+function changeUserPassword() {
+    let request = serializeUserFormChangePassword();
+    $.ajax({
+        type: 'POST',
+        url: '/api/restful/users/password',
+        contentType: "application/json",
+        data: request,
+        success: function (response) {
+            console.log("user successfully updated " + request);
         },
         error: function (data) {
             console.log("failed to update user" + request);

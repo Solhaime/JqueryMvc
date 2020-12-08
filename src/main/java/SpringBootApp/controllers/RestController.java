@@ -66,6 +66,12 @@ public class RestController {
         return ResponseEntity.ok(userService.springDataGetByName(username).get());
     }
 
+    @PostMapping("/password")
+    public ResponseEntity<Void> changePassword( @RequestBody User user ) {
+        userService.springDataChangeUserPassword(user);
+        return ResponseEntity.ok().build();
+    }
+
 }
 
 

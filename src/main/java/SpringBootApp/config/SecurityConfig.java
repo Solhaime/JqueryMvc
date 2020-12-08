@@ -5,10 +5,16 @@ import SpringBootApp.DAO.roleDao.springRoleDao;
 import SpringBootApp.DAO.userDao.springUserDao;
 import SpringBootApp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,19 +24,40 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import SpringBootApp.service.userService.UserDetailServiceImpl;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+
+import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.Filter;
 
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableOAuth2Client
 @EnableOAuth2Sso
+//@EnableAuthorizationServer
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailServiceImpl userService;
 
     @Autowired
     private springRoleDao roleDao;
+/*
+    @Autowired
+    private springUserDao userDao;
+    @Qualifier("oauth2ClientContext")
+    @Autowired
+    private OAuth2ClientContext oAuth2ClientContext;
+*/
+
     @Autowired
     public SecurityConfig( UserDetailServiceImpl userService ) {
         this.userService = userService;
@@ -46,10 +73,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login")
-              .defaultSuccessUrl("/test")/*.and().exceptionHandling().accessDeniedPage("/accessDenied")*/
-                    .and().logout();
-
+                .formLogin().loginPage("/login").loginProcessingUrl("/login").loginPage("/loginMain")
+                .loginProcessingUrl("/loginMain").defaultSuccessUrl("/test")
+                .and().logout().invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").logoutSuccessUrl("/");//.and().addFilterBefore(ssoFilter(), UsernamePasswordAuthenticationFilter.class).oauth2Login().loginPage("/login").defaultSuccessUrl("/test");
+/*        http.authorizeRequests().antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin() // enable form based login
+                .loginPage("/login").defaultSuccessUrl("/test")
+                .and().logout() // enable logout
+                .and().oauth2Login() // enable OAuth2
+                .loginPage("/login").defaultSuccessUrl("/test")
+                .and().csrf().disable(); // disable CSRF*/
 
 
     }
@@ -66,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(userService);
         return provider;
     }
+
     @Bean
     public PrincipalExtractor principalExtractor( springUserDao userDao){
         return map -> {
@@ -81,4 +116,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             return userDao.save(user);
         };
     }
+/*
+    @Bean
+    @ConfigurationProperties("google.resource")
+    @Primary
+    public ResourceServerProperties googleResource()
+    {
+        return new ResourceServerProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("google.client")
+    public AuthorizationCodeResourceDetails google()
+    {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    public FilterRegistrationBean oAuth2ClientFilterRegistration( OAuth2ClientContextFilter oAuth2ClientContextFilter)
+    {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(oAuth2ClientContextFilter);
+        registration.setOrder(-100);
+        return registration;
+    }
+
+    private Filter ssoFilter()
+    {
+        OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
+        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oAuth2ClientContext);
+        googleFilter.setRestTemplate(googleTemplate);
+        CustomUserInfoTokenServices tokenServices = new CustomUserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId());
+        tokenServices.setRestTemplate(googleTemplate);
+        googleFilter.setTokenServices(tokenServices);
+        tokenServices.setUserDao(userDao);
+        tokenServices.setPasswordEncoder(passwordEncoder());
+        return googleFilter;
+    }*/
 }

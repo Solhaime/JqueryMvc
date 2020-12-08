@@ -45,9 +45,14 @@ public class HelloController {
         return "/index";
     }
 
-    @GetMapping("/loginLocal")
+    @GetMapping("/loginMain")
     public String loginPage(){
-        return "/loginLocal";
+        return "loginMain";
+    }
+
+    @GetMapping("/login")
+    public String kostil(){
+        return "redirect:/test";
     }
 
 
@@ -61,7 +66,7 @@ public class HelloController {
     public String registerNewUser(@ModelAttribute("user") User user){
         user.addRole("USER");
         userService.add(user);
-        return "loginLocal";
+        return "loginMain";
     }
 
 

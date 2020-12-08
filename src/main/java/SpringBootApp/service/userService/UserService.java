@@ -31,4 +31,6 @@ public interface UserService {
     public void springDataDeleteById( Long id);
 
     public void springDataMerge( User user);
+
+    public void springDataChangeUserPassword(User user);
 }
