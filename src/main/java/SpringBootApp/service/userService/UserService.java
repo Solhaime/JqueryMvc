@@ -22,7 +22,7 @@ public interface UserService {
 
     public List<User> springDataFindAll();
 
-    public void springDataSave( User user);
+    public void springDataSave( User user) ;
 
     public Optional<User> springDataGetByName( String username);
 

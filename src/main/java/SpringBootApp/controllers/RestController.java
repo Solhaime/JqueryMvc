@@ -5,13 +5,17 @@ import SpringBootApp.model.Role;
 import SpringBootApp.model.User;
 import SpringBootApp.service.roleService.RoleService;
 import SpringBootApp.service.userService.UserService;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 import java.util.Set;
@@ -70,6 +74,15 @@ public class RestController {
     public ResponseEntity<Void> changePassword( @RequestBody User user ) {
         userService.springDataChangeUserPassword(user);
         return ResponseEntity.ok().build();
+    }
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Constraint username error occurred") //500
+    @ExceptionHandler(HibernateException.class)
+    public void constraintExceptionHandler(){
+      //  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Constraint username error occurred");
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    public void idFormatExceptionHandler(){
     }
 
 }
