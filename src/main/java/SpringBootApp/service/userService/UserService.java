@@ -1,6 +1,7 @@
 package SpringBootApp.service.userService;
 
 import SpringBootApp.model.User;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +34,6 @@ public interface UserService {
     public void springDataMerge( User user);
 
     public void springDataChangeUserPassword(User user);
+
+    void deleteUserByUsername(String username);
 }

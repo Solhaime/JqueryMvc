@@ -76,7 +76,7 @@
                 <div role="tabpanel" th:class="${'tab-pane '+(#authorization.expression('hasAuthority(''ADMIN'')')?'active':'')}" id="mainTable">
                     <div class="card">
                         <h4 class="card-header text-left font-weight-bold text-uppercase py-4">All Users</h4>
-                        <div class="card-body">
+                        <div class="card-body" id="users-list">
                                 <table class="table table-bordered table-responsive-md table-striped text-center" id="allUsersTable">
                                      <span class="table-add float-right mb-3 mr-2"><a href="#!" class="text-success"><i
                                              class="fas fa-plus fa-2x" aria-hidden="true"></i></a></span>

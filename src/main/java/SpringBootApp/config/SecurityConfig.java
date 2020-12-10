@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PrincipalExtractor principalExtractor( springUserDao userDao){
         return map -> {
             String username =(String) map.get("email");
-            User user = userDao.getByUsername(username).orElseGet(() -> {
+            User user = userDao.findUserByUsername(username).orElseGet(() -> {
                 User newUser = new User();
                 newUser.setUsername(username);
                 newUser.setPassword(passwordEncoder().encode("password"));

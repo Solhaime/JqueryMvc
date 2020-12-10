@@ -32,11 +32,17 @@ public class RestController {
     RoleService roleService;
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete( @PathVariable Long id ) {
+    public ResponseEntity<Void> deleteById( @PathVariable Long id ) {
         // userService.deleteUserById(id);
         userService.springDataDeleteById(id);
         return ResponseEntity.ok().build();
     }
+//    @DeleteMapping("/delete/username/{username}")
+//    public ResponseEntity<Void> deleteByUsername( @PathVariable String username ) {
+//        // userService.deleteUserById(id);
+//        userService.deleteUserByUsername(username);
+//        return ResponseEntity.ok().build();
+//    }
 
     @PostMapping("/update")
     public ResponseEntity<Void> update( @RequestBody User user ) {

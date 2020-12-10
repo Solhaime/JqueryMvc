@@ -10,8 +10,11 @@ import java.util.Optional;
 
 public interface springUserDao extends JpaRepository<User, Long>{
 
-    @Query("select user from User user JOIN FETCH user.roles where user.username =:username")
-    Optional<User> getByUsername( @Param("username") String username);
+    //@Query("select user from User user JOIN FETCH user.roles where user.username =:username")
+    Optional<User> findUserByUsername(String username);
+
+
+    void deleteUserByUsername( String username);
 /*    @Query("delete distinct user from User user where user.username =:username")
     void deleteById(Long id);*/
 }

@@ -8,6 +8,7 @@ import SpringBootApp.model.User;
 import SpringBootApp.service.roleService.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,7 +125,7 @@ public class UserServiceImp implements UserService {
     }
 
     public Optional<User> springDataGetByName( String username){
-      return springDataUserDAO.getByUsername(username);
+      return springDataUserDAO.findUserByUsername(username);
     }
 
     public User springDataGetById( Long id){
@@ -152,12 +153,16 @@ public class UserServiceImp implements UserService {
         }
         springDataUserDAO.save(user);
     }
-
+    @Transactional
     public void springDataChangeUserPassword(User user){
         String password = user.getPassword();
         user = springDataUserDAO.findById(user.getId()).get();
         user.setPassword(passwordEncoder.encode(password));
         springDataUserDAO.save(user);
+    }
+    @Transactional
+    public void deleteUserByUsername( String username ){
+        springDataUserDAO.deleteUserByUsername(username);
     }
 
 }

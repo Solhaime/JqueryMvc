@@ -2,6 +2,7 @@ package SpringBootApp;
 
 import SpringBootApp.controllers.HelloController;
 import SpringBootApp.controllers.RestController;
+import SpringBootApp.service.userService.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
