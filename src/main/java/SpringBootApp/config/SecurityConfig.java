@@ -116,41 +116,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             return userDao.save(user);
         };
     }
-/*
-    @Bean
-    @ConfigurationProperties("google.resource")
-    @Primary
-    public ResourceServerProperties googleResource()
-    {
-        return new ResourceServerProperties();
-    }
 
-    @Bean
-    @ConfigurationProperties("google.client")
-    public AuthorizationCodeResourceDetails google()
-    {
-        return new AuthorizationCodeResourceDetails();
-    }
-
-    @Bean
-    public FilterRegistrationBean oAuth2ClientFilterRegistration( OAuth2ClientContextFilter oAuth2ClientContextFilter)
-    {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(oAuth2ClientContextFilter);
-        registration.setOrder(-100);
-        return registration;
-    }
-
-    private Filter ssoFilter()
-    {
-        OAuth2ClientAuthenticationProcessingFilter googleFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/google");
-        OAuth2RestTemplate googleTemplate = new OAuth2RestTemplate(google(), oAuth2ClientContext);
-        googleFilter.setRestTemplate(googleTemplate);
-        CustomUserInfoTokenServices tokenServices = new CustomUserInfoTokenServices(googleResource().getUserInfoUri(), google().getClientId());
-        tokenServices.setRestTemplate(googleTemplate);
-        googleFilter.setTokenServices(tokenServices);
-        tokenServices.setUserDao(userDao);
-        tokenServices.setPasswordEncoder(passwordEncoder());
-        return googleFilter;
-    }*/
 }

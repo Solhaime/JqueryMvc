@@ -1,3 +1,11 @@
+delete from badpractice.roles;
+delete from badpractice.users;
+delete from badpractice.users_roles;
+
+ALTER TABLE users AUTO_INCREMENT=1;
+ALTER TABLE roles AUTO_INCREMENT=1;
+
+
 INSERT INTO badpractice.roles (name) VALUES ('ADMIN');
 INSERT INTO badpractice.roles (name) VALUES ('USER');
 INSERT INTO badpractice.users (is_active, name, lastname, username, password) values (true, 'admin','adminovich', 'admin', '$2a$10$otELPf/Ign5yYmU1Eib9UegA8p9MaNCw/SwjKy/5bk6xd3GnyfS3K');

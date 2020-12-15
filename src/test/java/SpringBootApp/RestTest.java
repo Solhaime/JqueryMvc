@@ -18,6 +18,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -150,7 +151,7 @@ public class RestTest {
         MvcResult updateResult = this.mockMvc.perform(post("http://localhost/api/restful/users/update")
                 .content(jsonTestUser
                 .replace("\"username\": \"testUser\""
-                ,"\"username\": \"updatedUser\""))
+                ,"\"id\": \"3\",\"username\": \"updatedUser\""))
                 .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status()
@@ -213,5 +214,49 @@ public class RestTest {
         assertNotNull(response);
         assertEquals(200, response.getStatus());
     }
+
+    @Test
+    public void updateUsersPassword() throws Exception {
+
+        MvcResult createResult = this.mockMvc.perform(post("http://localhost/api/restful/users/create")
+                .content(jsonTestUser)
+                .contentType("application/json"))
+                .andDo(print())
+                .andExpect(status()
+                        .is2xxSuccessful())
+                .andReturn();
+
+        assertEquals(200 , createResult.getResponse().getStatus());
+
+        MvcResult oldPasswordUser = this.mockMvc.perform(get("http://localhost/api/restful/users/{id}"
+                , "3")
+                .contentType("application/json"))
+                .andDo(print())
+                .andReturn();
+
+
+        MvcResult updateResult = this.mockMvc.perform(post("http://localhost/api/restful/users/password")
+                .content(jsonTestUser
+                        .replace("\"username\": \"testUser\""
+                                ,"\"id\": \"3\",\"password\": \"newPassword\""))
+                .contentType("application/json"))
+                .andDo(print())
+                .andExpect(status()
+                        .is2xxSuccessful())
+                .andReturn();
+
+        assertEquals(200 , updateResult.getResponse().getStatus());
+
+        MvcResult newPasswordUser = this.mockMvc.perform(get("http://localhost/api/restful/users/{id}"
+                , "3")
+                .contentType("application/json"))
+                .andDo(print())
+                .andReturn();
+
+        assertNotEquals(oldPasswordUser, newPasswordUser);
+
+    }
+
+
 
 }

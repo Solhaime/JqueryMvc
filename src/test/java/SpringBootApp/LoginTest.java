@@ -33,26 +33,26 @@ public class LoginTest {
     private HelloController helloController;
 
     @Test
-    public void test() throws Exception{
+    public void test() throws Exception {
         assertThat(helloController).isNotNull();
     }
 
     @Test
-    public void accessDeniedTest() throws Exception{
+    public void accessDeniedTest() throws Exception {
         this.mockMvc.perform(get("/test"))
                 .andDo(print()).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
 
     @Test
-    public void correctLoginTest() throws Exception{
+    public void correctLoginTest() throws Exception {
         this.mockMvc.perform(formLogin().loginProcessingUrl("/loginMain").user("admin").password("admin"))
-                    .andDo(print()).andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/test"));
+                .andDo(print()).andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/test"));
     }
 
     @Test
-    public void badCredentials() throws Exception{
+    public void badCredentials() throws Exception {
         this.mockMvc.perform(formLogin().loginProcessingUrl("/loginMain").user("sobakaTakaya").password("pochemuNasrala"))
                 .andDo(print()).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/login?error"));
     }
